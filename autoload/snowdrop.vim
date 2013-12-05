@@ -48,11 +48,6 @@ function! snowdrop#load(libclang_path)
 	endif
 
 	call snowdrop#python#load(a:libclang_path)
-
-	if !executable(snowdrop#libclang_file())
-		call snowdrop#echoerr("Not found libclang : " . snowdrop#python#get_library_file())
-		return
-	endif
 endfunction
 
 
