@@ -1,0 +1,58 @@
+*snowdrop.txt*		Vim で libclang を使用したプラグインです。
+
+
+==============================================================================
+概要						*snowdrop-introduction*
+
+Clang の libclang を利用したプラグインです。
+
+Requirement:
+	Clang 3.3 - http://llvm.org/releases/3.3/tools/clang/docs/ReleaseNotes.html
+	|+python|
+
+
+==============================================================================
+インターフェース				*snowdrop-interface*
+
+------------------------------------------------------------------------------
+関数						*snowdrop-functions*
+
+snowdrop#current_includes([{option}])		*snowdrop#current_includes()*
+	カレントバッファで include が行われているファイルのリストを返します。
+	これは再帰的に全てのインクルードファイルを検索します。
+	{option} はコマンドオプションを渡すことができます。
+
+snowdrop#get_libclang_version()		*snowdrop#get_libclang_version()*
+	読み込まれた libclang のバージョンを文字列で返します。
+
+
+==============================================================================
+設定						*snowdrop-setting*
+
+------------------------------------------------------------------------------
+snowdrop の変数					*snowdrop-variables*
+
+g:snowdrop#libclang_path			*g:snowdrop#libclang_path*
+	libclang へのパスを設定します。
+
+Default: >
+	let g:snowdrop#libclang_path = ""
+<
+
+g:snowdrop#include_paths			*g:snowdrop#include_paths*
+	 |filetype| をキーとしたインクルードパスを辞書で設定します。
+	 また、インクルードパスはこの変数に設定されている以外も 'path' を参照
+	 します。
+
+Example >
+	let g:snowdrop#include_paths = {
+	\	"cpp" : {
+	\		"C:/cpp/boost",
+	\		"C:/cpp/sprout",
+	\	}
+	\}
+<
+
+
+==============================================================================
+vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
