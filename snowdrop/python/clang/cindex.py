@@ -3073,21 +3073,21 @@ functionList = [
    Cursor,
    Cursor.from_result),
 
-  ("clang_Cursor_isBitField",
-   [Cursor],
-   bool),
-
-  ("clang_Type_getAlignOf",
-   [Type],
-   c_longlong),
-
-  ("clang_Type_getOffsetOf",
-   [Type, c_char_p],
-   c_longlong),
-
-  ("clang_Type_getSizeOf",
-   [Type],
-   c_ulonglong),
+#   ("clang_Cursor_isBitField",
+#    [Cursor],
+#    bool),
+# 
+#   ("clang_Type_getAlignOf",
+#    [Type],
+#    c_longlong),
+# 
+#   ("clang_Type_getOffsetOf",
+#    [Type, c_char_p],
+#    c_longlong),
+# 
+#   ("clang_Type_getSizeOf",
+#    [Type],
+#    c_ulonglong),
 ]
 
 class LibclangError(Exception):
