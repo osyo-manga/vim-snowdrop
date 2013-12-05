@@ -55,9 +55,10 @@ function! snowdrop#libclang_file()
 	return snowdrop#python#get_library_file()
 endfunction
 
+
 function! snowdrop#includes_from_bufnr(bufnr, option)
 	let option = a:option
-	return snowdrop#python#includes(join(getbufline(a:bufnr, 1, "$"), "\n"), option)
+	return snowdrop#includes(join(getbufline(a:bufnr, 1, "$"), "\n"), option)
 endfunction
 
 
@@ -67,14 +68,16 @@ function! snowdrop#current_includes(...)
 endfunction
 
 
+function! snowdrop#includes(source, option)
+	return snowdrop#python#includes(a:source, a:option)
+endfunction
+
 function! snowdrop#get_libclang_version()
 	return snowdrop#python#get_libclang_version()
 endfunction
 
 
 call snowdrop#load(g:snowdrop#libclang_path)
-
-
 
 
 
