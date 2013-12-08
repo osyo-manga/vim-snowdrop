@@ -41,9 +41,7 @@ function! snowdrop#python#load(libclang_path)
 
 	call s:import(s:python_module_path, "snowdrop")
 
-" 	if !get(s:, "is_loaded", 0)
 	py snowdrop.set_library_path( vim.eval("a:libclang_path") )
-" 	endif
 
 	let s:is_loaded = 1
 endfunction
@@ -53,18 +51,34 @@ function! snowdrop#python#get_library_file()
 	return pyeval('snowdrop.get_library_file()')
 endfunction
 
+function! snowdrop#python#get_libclang_version()
+	return pyeval('snowdrop.get_clang_version()')
+endfunction
 
-function! snowdrop#python#includes(source, option)
+
+function! snowdrop#python#includes(source, option, dummy_filename)
 	let dummy_filename = "INPUT.cpp"
-	let result = pyeval('snowdrop.includes( vim.eval("a:source"), vim.eval("split(a:option, '' '')") )')
-	call remove(result, index(result, dummy_filename))
+	let result = pyeval('snowdrop.includes(
+\		vim.eval("a:source"),
+\		vim.eval("split(a:option, '' '')"),
+\		vim.eval("a:dummy_filename")
+\	)')
+	if empty(result)
+		return []
+	endif
+	call remove(result, index(result, a:dummy_filename))
 	return result
 endfunction
 
 
-function! snowdrop#python#get_libclang_version()
-	return pyeval('snowdrop.get_clang_version()')
+function! snowdrop#python#definition(source, option, line, col)
+	return pyeval('snowdrop.definition( vim.eval("a:source"), vim.eval("split(a:option, '' '')"), int(vim.eval("a:line")), int(vim.eval("a:col")) )')
 endfunction
+
+
+if expand("%:p") == expand("<sfile>:p")
+	call snowdrop#load(g:snowdrop#libclang_path)
+endif
 
 
 let &cpo = s:save_cpo
