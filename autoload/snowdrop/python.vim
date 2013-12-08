@@ -65,7 +65,7 @@ function! snowdrop#python#includes(source, filename, option)
 	if empty(result)
 		return []
 	endif
-	call remove(result, index(result, a:dummy_filename))
+	call remove(result, index(result, a:filename))
 	return result
 endfunction
 
