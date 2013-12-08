@@ -3,18 +3,27 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+let g:snowdrop#open_cmd = get(g:, "snowdrop#open_cmd", "edit")
 
 let g:snowdrop#libclang_path = get(g:, "snowdrop#libclang_path", "")
 
 let g:snowdrop#include_paths = get(g:, "snowdrop#include_paths", {})
 
+let g:snowdrop#command_options = get(g:, "snowdrop#command_options", {})
+
+let s:command_options = {
+\	"cpp" : "-std=c++1y",
+\}
+
+function! s:command_option(filetype)
+	return get(extend(s:command_options, get(g:, "snowdrop#command_options", {})), a:filetype, "")
+endfunction
+
+
 let s:extensions = {
 \	"c"   : "c",
 \	"cpp" : "cpp",
 \}
-" let g:snowdrop#exts = {
-" \	
-" \}
 
 function! s:extension(filetype)
 	return get(extend(s:extensions, get(g:, "snowdrop#extension", {})), a:filetype, a:filetype)
@@ -44,7 +53,7 @@ endfunction
 
 function! snowdrop#current_command_opt(...)
 	let option = get(a:, 1, "")
-	return snowdrop#to_include_opt(snowdrop#get_current_include_paths()) . " " . option
+	return snowdrop#to_include_opt(snowdrop#get_current_include_paths()) . " " . s:command_option(&filetype) . " " . option
 endfunction
 
 
@@ -123,26 +132,32 @@ function! snowdrop#definition(source, line, col, ...)
 endfunction
 
 
-function! snowdrop#cursor_definition(...)
+function! snowdrop#definition_in_cursor(...)
 	let option = snowdrop#current_command_opt() . " " . get(a:, 1, "")
 	let [line, col, dummy] = getpos(".")[1:]
 	let [filename, line, col] = snowdrop#definition(snowdrop#source("%"), line, col, option)
 	if filename == s:dummy_filename(&filetype)
-		return [bufname("%"), line, col]
+		return [empty(bufname("%")) ? bufnr("%") : bufname("%"), line, col]
 	else
 		return [filename, line, col]
 	endif
 endfunction
 
 
-function! snowdrop#goto_cursor_definition(...)
+
+let g:snowdrop#goto_definition_open_cmd = get(g:, "snowdrop#goto_definition_open_cmd", "edit")
+
+function! snowdrop#goto_definition_in_cursor(...)
 	let option = get(a:, 1, "")
-	let open_cmd = get(a:, 2, "edit")
-	let [filename, line, col] = snowdrop#cursor_definition(option)
+	let open_cmd = get(a:, 2, g:snowdrop#goto_definition_open_cmd)
+	let [filename, line, col] = snowdrop#definition_in_cursor(option)
 	if empty(filename)
-		echo "Not found " . expand("<cword>") . "."
+		echo "Not found '" . expand("<cword>") . "'."
+		return
 	endif
-	execut open_cmd filename
+	if type(filename) == type("") && filereadable(filename)
+		execut open_cmd filename
+	endif
 	call setpos(".", [0, line, col, 0])
 endfunction
 

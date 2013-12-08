@@ -13,6 +13,7 @@ clang.cindex.functionList.append(
 )
 
 conf = Config()
+index = Index.create()
 
 def set_library_path(path):
 	if path != "":
@@ -24,7 +25,6 @@ def get_library_file():
 
 
 def includes(source, options, name):
-	index = Index.create()
 	tree = index.parse(name, args = options, unsaved_files = [ (name, source) ])
 	return list(set(map((lambda x: x.source.name), tree.get_includes())))
 
@@ -34,7 +34,6 @@ def get_clang_version():
 
 
 def definition(source, filename, options, line, col):
-	index = Index.create()
 	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)

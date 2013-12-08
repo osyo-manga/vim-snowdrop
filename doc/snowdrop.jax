@@ -15,15 +15,35 @@ Requirement:
 インターフェース				*snowdrop-interface*
 
 ------------------------------------------------------------------------------
+コマンド					*snowdrop-commands*
+
+SnowdropGotoDefinitionInCursor			*:SnowdropGotoDefinitionInCursor*
+	カーソルの宣言位置へと移動します。
+	この時に別のファイルを開く場合は |g:snowdrop#goto_definition_open_cmd|
+	に設定されているコマンドを使用して開かれます。
+
+------------------------------------------------------------------------------
 関数						*snowdrop-functions*
+
+snowdrop#get_libclang_version()		*snowdrop#get_libclang_version()*
+	読み込まれた libclang のバージョンを文字列で返します。
 
 snowdrop#current_includes([{option}])		*snowdrop#current_includes()*
 	カレントバッファで include が行われているファイルのリストを返します。
 	これは再帰的に全てのインクルードファイルを検索します。
-	{option} はコマンドオプションを渡すことができます。
+	{option} は Clang のコマンドオプションになる。
 
-snowdrop#get_libclang_version()		*snowdrop#get_libclang_version()*
-	読み込まれた libclang のバージョンを文字列で返します。
+
+snowdrop#definition_in_cursor()			*snowdrop#definition_in_cursor()*
+	カーソルの宣言位置を次の3つの要素を持つリストで返します。
+		[filename, ]
+
+					*snowdrop#goto_definition_in_cursor()*
+snowdrop#goto_definition_in_cursor([{option}, {opencmd}])
+	カーソル位置の宣言場所へ移動する。
+	{option} は Clang のコマンドオプションになる。
+	{opencmd} は宣言場所のファイルを開く際のコマンドになる。
+	デフォルトでは |g:snowdrop#goto_definition_open_cmd| が使用される。
 
 
 ==============================================================================
@@ -52,7 +72,20 @@ Example >
 	\	}
 	\}
 <
+g:snowdrop#goto_definition_open_cmd	*g:snowdrop#goto_definition_open_cmd*
+	|snowdrop#goto_cursor_definition()| で使用されるファイルを開くためのコ
+	マンドを設定する
+Default: >
+	let g:snowdrop#goto_definition_open_cmd = "edit"
+<
 
+g:snowdrop#command_options		*g:snowdrop#command_options*
+	|filetype| をキーとした Clang のコマンドオプションを設定する辞書です。
+Example: >
+	let g:snowdrop#command_options = {
+	\	"cpp" : "-std=c++1y",
+	\}
+<
 
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
