@@ -56,12 +56,11 @@ function! snowdrop#python#get_libclang_version()
 endfunction
 
 
-function! snowdrop#python#includes(source, option, dummy_filename)
-	let dummy_filename = "INPUT.cpp"
+function! snowdrop#python#includes(source, filename, option)
 	let result = pyeval('snowdrop.includes(
 \		vim.eval("a:source"),
 \		vim.eval("split(a:option, '' '')"),
-\		vim.eval("a:dummy_filename")
+\		vim.eval("a:filename")
 \	)')
 	if empty(result)
 		return []
@@ -71,8 +70,14 @@ function! snowdrop#python#includes(source, option, dummy_filename)
 endfunction
 
 
-function! snowdrop#python#definition(source, option, line, col)
-	return pyeval('snowdrop.definition( vim.eval("a:source"), vim.eval("split(a:option, '' '')"), int(vim.eval("a:line")), int(vim.eval("a:col")) )')
+function! snowdrop#python#definition(source, filename, option, line, col)
+	return pyeval('snowdrop.definition(
+\		vim.eval("a:source"),
+\		vim.eval("a:filename"),
+\		vim.eval("split(a:option, '' '')"),
+\		int(vim.eval("a:line")),
+\		int(vim.eval("a:col")) )
+\	')
 endfunction
 
 

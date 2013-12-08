@@ -3,6 +3,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+
 let g:snowdrop#libclang_path = get(g:, "snowdrop#libclang_path", "")
 
 let g:snowdrop#include_paths = get(g:, "snowdrop#include_paths", {})
@@ -17,6 +18,11 @@ let s:extensions = {
 
 function! s:extension(filetype)
 	return get(extend(s:extensions, get(g:, "snowdrop#extension", {})), a:filetype, a:filetype)
+endfunction
+
+
+function! s:dummy_filename(filetype)
+	return "snowdrop_dummy_filename." . s:extension(a:filetype)
 endfunction
 
 
@@ -72,7 +78,7 @@ endfunction
 function! snowdrop#source_from_bufnr(bufnr)
 	return [
 \		join(getbufline(a:bufnr, 1, "$"), "\n"),
-\		"dummy_file." .  s:extension(getbufvar(a:bufnr, "&filetype", ""))
+\		s:dummy_filename(getbufvar(a:bufnr, "&filetype", ""))
 \	]
 endfunction
 
@@ -95,7 +101,7 @@ endfunction
 
 function! snowdrop#current_includes(...)
 	let option = snowdrop#current_command_opt() . " " . get(a:, 1, "")
-	return snowdrop#includes(snowdrop#source(bufnr("%")), option)
+	return snowdrop#includes(snowdrop#source("%"), option)
 endfunction
 
 
@@ -104,21 +110,41 @@ function! snowdrop#includes(source, ...)
 		return
 	endif
 	let option = get(a:, 1, "")
-	return snowdrop#python#includes(a:source[0], option, a:source[1])
+	return snowdrop#python#includes(a:source[0], a:source[1], option)
 endfunction
 
 
-function! snowdrop#definition(source, option, line, col)
-	return snowdrop#python#definition(a:source, a:option, a:line, a:col)
+function! snowdrop#definition(source, line, col, ...)
+	if empty(a:source)
+		return
+	endif
+	let option = get(a:, 1, "")
+	return snowdrop#python#definition(a:source[0], a:source[1], option, a:line, a:col)
 endfunction
 
 
 function! snowdrop#cursor_definition(...)
 	let option = snowdrop#current_command_opt() . " " . get(a:, 1, "")
 	let [line, col, dummy] = getpos(".")[1:]
-	return snowdrop#definition(join(getline(1, "$"), "\n"), option, line, col)
+	let [filename, line, col] = snowdrop#definition(snowdrop#source("%"), line, col, option)
+	if filename == s:dummy_filename(&filetype)
+		return [bufname("%"), line, col]
+	else
+		return [filename, line, col]
+	endif
 endfunction
 
+
+function! snowdrop#goto_cursor_definition(...)
+	let option = get(a:, 1, "")
+	let open_cmd = get(a:, 2, "edit")
+	let [filename, line, col] = snowdrop#cursor_definition(option)
+	if empty(filename)
+		echo "Not found " . expand("<cword>") . "."
+	endif
+	execut open_cmd filename
+	call setpos(".", [0, line, col, 0])
+endfunction
 
 function! snowdrop#get_libclang_version()
 	return snowdrop#python#get_libclang_version()

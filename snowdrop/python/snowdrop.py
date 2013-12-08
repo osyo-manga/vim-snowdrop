@@ -23,19 +23,6 @@ def get_library_file():
 	return conf.get_filename()
 
 
-def definition(source, options, line, col):
-	index = Index.create()
-	tu = index.parse("INPUT.cpp", args = options, unsaved_files = [ ("INPUT.cpp", source) ])
-	location = tu.get_location("INPUT.cpp", (line, col))
-	cursor = Cursor.from_location(tu, location)
-	defs = [cursor.get_definition(), cursor.referenced]
-	for d in defs:
-		if d is not None and location != d.location:
-			location = d.location
-			return [location.file.name, location.line, location.column]
-	return ["", 0, 0]
-
-
 def includes(source, options, name):
 	index = Index.create()
 	tree = index.parse(name, args = options, unsaved_files = [ (name, source) ])
@@ -44,4 +31,18 @@ def includes(source, options, name):
 
 def get_clang_version():
 	return clang.cindex.conf.lib.clang_getClangVersion()
+
+
+def definition(source, filename, options, line, col):
+	index = Index.create()
+	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	location = tu.get_location(filename, (line, col))
+	cursor = Cursor.from_location(tu, location)
+	defs = [cursor.get_definition(), cursor.referenced]
+	for d in defs:
+		if d is not None and location != d.location:
+			location = d.location
+			return [location.file.name, location.line, location.column]
+	return ["", 0, 0]
+
 
