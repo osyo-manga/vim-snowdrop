@@ -13,6 +13,14 @@ clang.cindex.functionList.append(
 )
 
 
+clang.cindex.functionList.append(
+  ("clang_getTypeSpelling",
+   [clang.cindex.Type],
+   clang.cindex._CXString,
+   clang.cindex._CXString.from_result),
+)
+
+
 def set_library_path(path):
 	if path != "":
 		Config.loaded = False
@@ -45,5 +53,38 @@ def definition(source, filename, options, line, col):
 			location = d.location
 			return [location.file.name, location.line, location.column]
 	return ["", 0, 0]
+
+
+def type_spelling(type):
+	return clang.cindex.conf.lib.clang_getTypeSpelling(type)
+
+
+def print_type_status(type, status = "type"):
+	print "---- %s ----" % status
+	print "spelling : %s" % type_spelling(type)
+	print "kind : %s" % type.kind.spelling
+
+
+def print_cursor_status(cursor, status = "cursor"):
+	print "---- %s ----" % status
+	print "location : %s" % cursor.location
+	print "displayname : %s" % cursor.displayname
+	print "spelling : %s" % cursor.spelling
+	print "kind : %s" % cursor.kind.name
+# 	print "extent : %s" % cursor.extent
+	print_type_status(cursor.type)
+	print_type_status(cursor.result_type, "result_type")
+	if cursor.kind.is_declaration():
+		print_type_status(cursor.underlying_typedef_type, "underlying_typedef_type")
+	print " "
+
+
+def print_status(source, filename, options, line, col):
+	index = Index.create()
+	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	location = tu.get_location(filename, (line, col))
+	cursor = Cursor.from_location(tu, location)
+	print_cursor_status(cursor)
+	print_cursor_status(cursor.get_definition(), "cursor definition")
 
 

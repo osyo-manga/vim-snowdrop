@@ -35,6 +35,14 @@ function! s:dummy_filename(filetype)
 endfunction
 
 
+
+function! snowdrop#get_libclang_version()
+	return libcall("libclang.dll", "clang_getNullCursor", "")
+" 	return snowdrop#python#get_libclang_version()
+endfunction
+
+
+
 function! snowdrop#get_current_include_paths()
 	let filetype = &filetype
 	let paths = get(g:snowdrop#include_paths, filetype, [])
@@ -144,7 +152,6 @@ function! snowdrop#definition_in_cursor(...)
 endfunction
 
 
-
 let g:snowdrop#goto_definition_open_cmd = get(g:, "snowdrop#goto_definition_open_cmd", "edit")
 
 function! snowdrop#goto_definition_in_cursor(...)
@@ -161,12 +168,26 @@ function! snowdrop#goto_definition_in_cursor(...)
 	call setpos(".", [0, line, col, 0])
 endfunction
 
-function! snowdrop#get_libclang_version()
-	return snowdrop#python#get_libclang_version()
+
+function! snowdrop#print_status(source, line, col, ...)
+	if empty(a:source)
+		return
+	endif
+	let option = get(a:, 1, "")
+return snowdrop#python#print_status(a:source[0], a:source[1], option, a:line, a:col)
 endfunction
 
 
+function! snowdrop#print_staus_in_cursor(...)
+	let option = snowdrop#current_command_opt() . " " . get(a:, 1, "")
+	let [line, col, dummy] = getpos(".")[1:]
+	call snowdrop#print_status(snowdrop#source("%"), line, col, option)
+endfunction
+
+
+
 call snowdrop#load(g:snowdrop#libclang_path)
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo

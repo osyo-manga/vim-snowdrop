@@ -81,6 +81,17 @@ function! snowdrop#python#definition(source, filename, option, line, col)
 endfunction
 
 
+function! snowdrop#python#print_status(source, filename, option, line, col)
+	let option = split(a:option, ' ')
+	py snowdrop.print_status(
+\		vim.eval("a:source"),
+\		vim.eval("a:filename"),
+\		vim.eval("option"),
+\		int(vim.eval("a:line")),
+\		int(vim.eval("a:col")) )
+endfunction
+
+
 if expand("%:p") == expand("<sfile>:p")
 	call snowdrop#load(g:snowdrop#libclang_path)
 endif
