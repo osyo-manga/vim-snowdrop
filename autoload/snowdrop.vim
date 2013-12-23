@@ -114,7 +114,41 @@ function! snowdrop#source(expr)
 \		 : type(expr) == type("") && filereadable(expr) ? snowdrop#source_from_file(expr)
 \		 : []
 endfunction
- 
+
+
+function! snowdrop#make_file_context(file, ...)
+	let base = get(a:, 1, {})
+	return extend(base, {
+\		"filename" : a:file,
+\		"text" : join(readfile(a:file), "\n"),
+\	}, "keep")
+endfunction
+
+
+function! snowdrop#make_buffer_context(bufnr, ...)
+	let base = get(a:, 1, {})
+	return extend(base, {
+\		"filename" : s:dummy_filename(getbufvar(a:bufnr, "&filetype", "")),
+\		"text" : join(getbufline(a:bufnr, 1, "$"), "\n"),
+\	}, "keep")
+endfunction
+
+
+function! snowdrop#make_current_context(...)
+	let base = get(a:, 1, {})
+	let filename = substitute(fnamemodify(bufname("%"), ":p"), '\\', '/', 'g')
+	if filereadable(filename)
+		let base = snowdrop#make_file_context(filename, base)
+	else
+		let base = snowdrop#make_buffer_context("%", base)
+	endif
+	return extend(base, {
+\		"line" : line("."),
+\		"col"  : col("."),
+\		"option" : snowdrop#current_command_opt()
+\	}, "keep")
+endfunction
+
 
 function! snowdrop#current_includes(...)
 	let option = snowdrop#current_command_opt() . " " . get(a:, 1, "")
