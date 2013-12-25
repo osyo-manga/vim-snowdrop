@@ -45,6 +45,10 @@ function! snowdrop#get_libclang_version(...)
 endfunction
 
 
+function! snowdrop#check()
+	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
+endfunction
+
 
 let g:snowdrop#include_paths = get(g:, "snowdrop#include_paths", {})
 
@@ -180,6 +184,7 @@ function! snowdrop#typeof(context)
 " 		return result.type
 " 	endif
 endfunction
+
 
 function! snowdrop#typeof_in_cursor(...)
 	return snowdrop#typeof(snowdrop#context#cursor(get(a:, 1, {})))
