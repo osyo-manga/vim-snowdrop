@@ -100,11 +100,13 @@ def type_context(type):
 
 
 def location_context(location):
-	return {
-		"file" : location.file.name,
-		"line" : location.line,
-		"column" : location.column,
-	}
+	if location.file:
+		return {
+			"file" : "",
+			"line" : location.line,
+			"column" : location.column,
+		}
+	return {}
 
 def cursor_context(cursor):
 	result = {
