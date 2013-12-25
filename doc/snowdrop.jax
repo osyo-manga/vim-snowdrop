@@ -1,5 +1,16 @@
 *snowdrop.txt*		Vim で libclang を使用したプラグインです。
 
+==============================================================================
+目次						*snowdrop-contents*
+
+概要				|snowdrop-introduction|
+インターフェース		|snowdrop-interface|
+  コマンド			  |snowdrop-commands|
+  関数				  |snowdrop-functions|
+設定				|snowdrop-setting|
+  snowdrop の変数		  |snowdrop-variables|
+
+
 
 ==============================================================================
 概要						*snowdrop-introduction*
@@ -17,7 +28,7 @@ Requirement:
 ------------------------------------------------------------------------------
 コマンド					*snowdrop-commands*
 
-SnowdropGotoDefinitionInCursor			*:SnowdropGotoDefinitionInCursor*
+:SnowdropGotoDefinitionInCursor			*:SnowdropGotoDefinitionInCursor*
 	カーソルの宣言位置へと移動します。
 	この時に別のファイルを開く場合は |g:snowdrop#goto_definition_open_cmd|
 	に設定されているコマンドを使用して開かれます。
@@ -25,23 +36,43 @@ SnowdropGotoDefinitionInCursor			*:SnowdropGotoDefinitionInCursor*
 ------------------------------------------------------------------------------
 関数						*snowdrop-functions*
 
-snowdrop#get_libclang_version()		*snowdrop#get_libclang_version()*
-	読み込まれた libclang のバージョンを文字列で返します。
+snowdrop#get_libclang_filename()		*snowdrop#get_libclang_filename()*
+	読み込まれる libclang のファイルパスを返します。
+	これは |g:snowdrop#libclang_path| や |g:snowdrop#libclang_file| の
+	設定に依存します。
+	また、|g:snowdrop#libclang_file| が空の文字列であれば環境によって自動
+	的にファイル名が決定されます。
 
-snowdrop#current_includes([{option}])		*snowdrop#current_includes()*
+	MacOS    : "libclang.dylib"
+	Windows  : "libclang.dll"
+	それ以外 : "libclang.so"
+
+Example: >
+	" Windows の場合
+	echo snowdrop#get_libclang_filename()
+	" => libclang.dll
+<
+
+snowdrop#get_libclang_version([{libclang}])	*snowdrop#get_libclang_version()*
+	{libclang} のバージョンを返す。
+	引数がなければ |snowdrop#get_libclang()| が使用される。
+	また、これは |+python| がなくても動作する。
+Example: >
+	echo snowdrop#get_libclang_version()
+	" => clang version 3.3 (tags/RELEASE_33/final)
+<
+snowdrop#current_includes([{context}])		*snowdrop#current_includes()*
 	カレントバッファで include が行われているファイルのリストを返します。
 	これは再帰的に全てのインクルードファイルを検索します。
-	{option} は Clang のコマンドオプションになる。
 
 
 snowdrop#definition_in_cursor()			*snowdrop#definition_in_cursor()*
 	カーソルの宣言位置を次の3つの要素を持つリストで返します。
-		[filename, ]
+		[filename, line, col]
 
 					*snowdrop#goto_definition_in_cursor()*
-snowdrop#goto_definition_in_cursor([{option}, {opencmd}])
+snowdrop#goto_definition_in_cursor([{opencmd}, {context}])
 	カーソル位置の宣言場所へ移動する。
-	{option} は Clang のコマンドオプションになる。
 	{opencmd} は宣言場所のファイルを開く際のコマンドになる。
 	デフォルトでは |g:snowdrop#goto_definition_open_cmd| が使用される。
 
@@ -57,6 +88,13 @@ g:snowdrop#libclang_path			*g:snowdrop#libclang_path*
 
 Default: >
 	let g:snowdrop#libclang_path = ""
+<
+
+g:snowdrop#libclang_file			*g:snowdrop#libclang_file*
+	libclang のファイル名を設定します。
+
+Example >
+	let g:snowdrop#libclang_file = "liblibclang.dll"
 <
 
 g:snowdrop#include_paths			*g:snowdrop#include_paths*
@@ -85,7 +123,25 @@ Example: >
 	let g:snowdrop#command_options = {
 	\	"cpp" : "-std=c++1y",
 	\}
+
 <
+==============================================================================
+コンテキスト						*snowdrop-context*
+
+						*snowdrop-context-filename*
+filename		String		(Required)
+			ファイル名
+
+						*snowdrop-context-source*
+source			String		(Required)
+			ソースコード
+
+						*snowdrop-context-option*
+option			String		(Optional)
+			Clang のコマンドオプション
+
+
+
 
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl

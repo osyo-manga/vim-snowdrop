@@ -2,8 +2,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpo
 set cpo&vim
 
-
-let s:plugin_root = substitute(expand("<sfile>:p:h:h:h"), '\\', '/', 'g')
+let s:plugin_root = substitute(expand("<sfile>:p:h:h:h:h"), '\\', '/', 'g')
 let s:python_module_path = s:plugin_root . "/snowdrop/python"
 
 
@@ -36,27 +35,30 @@ function! s:import(path, module)
 endfunction
 
 
-function! snowdrop#python#load(libclang_path)
+function! snowdrop#libclang#python#load(libclang)
 	py import vim
 
 	call s:import(s:python_module_path, "snowdrop")
 
-	py snowdrop.set_library_path( vim.eval("a:libclang_path") )
+	let path = fnamemodify(a:libclang, ":h")
+	let file = fnamemodify(a:libclang, ":t")
+	py snowdrop.set_library_path( vim.eval("path") )
 
 	let s:is_loaded = 1
 endfunction
 
 
-function! snowdrop#python#get_library_file()
+function! snowdrop#libclang#python#get_library_file()
 	return pyeval('snowdrop.get_library_file()')
 endfunction
 
-function! snowdrop#python#get_libclang_version()
+
+function! snowdrop#libclang#python#get_clang_version()
 	return pyeval('snowdrop.get_clang_version()')
 endfunction
 
 
-function! snowdrop#python#includes(source, filename, option)
+function! snowdrop#libclang#python#includes(source, filename, option)
 	let result = pyeval('snowdrop.includes(
 \		vim.eval("a:source"),
 \		vim.eval("split(a:option, '' '')"),
@@ -70,7 +72,7 @@ function! snowdrop#python#includes(source, filename, option)
 endfunction
 
 
-function! snowdrop#python#definition(source, filename, option, line, col)
+function! snowdrop#libclang#python#definition(source, filename, option, line, col)
 	return pyeval('snowdrop.definition(
 \		vim.eval("a:source"),
 \		vim.eval("a:filename"),
@@ -81,7 +83,8 @@ function! snowdrop#python#definition(source, filename, option, line, col)
 endfunction
 
 
-function! snowdrop#python#print_status(source, filename, option, line, col)
+
+function! snowdrop#libclang#python#print_status(source, filename, option, line, col)
 	let option = split(a:option, ' ')
 	py snowdrop.print_status(
 \		vim.eval("a:source"),
@@ -92,8 +95,9 @@ function! snowdrop#python#print_status(source, filename, option, line, col)
 endfunction
 
 
+
 if expand("%:p") == expand("<sfile>:p")
-	call snowdrop#load(g:snowdrop#libclang_path)
+	call snowdrop#libclang#python#load(snowdrop#get_libclang_filename())
 endif
 
 
