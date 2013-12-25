@@ -9,17 +9,18 @@ function! s:binding_call(name, ...)
 endfunction
 
 
-function! snowdrop#libclang#load(libclang)
+function! snowdrop#libclang#load(...)
+	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
 	if !has("python")
 		call snowdrop#echoerr("Requires +python.")
 		return
 	endif
-	if executable(a:libclang) == 0
-		call snowdrop#echoerr("Not found libclang : " . a:libclang)
+	if executable(libclang) != 1
+		call snowdrop#echoerr("Not found libclang : " . libclang)
 		return
 	endif
 
-	call s:binding_call("load", a:libclang)
+	call s:binding_call("load", libclang)
 endfunction
 
 
@@ -48,6 +49,10 @@ endfunction
 
 function! snowdrop#libclang#print_status(source, filename, option, line, col)
 	return s:binding_call("print_status", a:source, a:filename, a:option, a:line, a:col)
+endfunction
+
+function! snowdrop#libclang#context(source, filename, option, line, col)
+	return s:binding_call("context", a:source, a:filename, a:option, a:line, a:col)
 endfunction
 
 

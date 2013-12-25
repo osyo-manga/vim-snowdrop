@@ -145,5 +145,38 @@ function! snowdrop#print_staus_in_cursor(...)
 endfunction
 
 
+function! snowdrop#context(context)
+	return snowdrop#libclang#context(
+\		a:context.source,
+\		a:context.filename,
+\		get(a:context, "option"),
+\		a:context.line,
+\		a:context.col,
+\	)
+endfunction
+
+
+function! snowdrop#context_in_cursor(...)
+	return snowdrop#context(snowdrop#context#cursor(get(a:, 1, {})))
+endfunction
+
+
+function! snowdrop#typeof(context)
+	let result = snowdrop#context(a:context)
+	if empty(result)
+		return {}
+	endif
+	if result.type.kind == "FUNCTIONPROTO"
+		return result.result_type
+	else
+		return result.type
+	endif
+endfunction
+
+function! snowdrop#typeof_in_cursor(...)
+	return snowdrop#typeof(snowdrop#context#cursor(get(a:, 1, {})))
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

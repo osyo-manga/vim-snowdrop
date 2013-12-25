@@ -21,6 +21,7 @@ clang.cindex.functionList.append(
 )
 
 
+
 def set_library_path(path):
 	if path != "":
 		Config.loaded = False
@@ -63,20 +64,22 @@ def print_type_status(type, status = "type"):
 	print "---- %s ----" % status
 	print "spelling : %s" % type_spelling(type)
 	print "kind : %s" % type.kind.spelling
+	print "get_canonical : %s" % type_spelling(type.get_canonical())
 
 
 def print_cursor_status(cursor, status = "cursor"):
-	print "---- %s ----" % status
-	print "location : %s" % cursor.location
-	print "displayname : %s" % cursor.displayname
-	print "spelling : %s" % cursor.spelling
-	print "kind : %s" % cursor.kind.name
-# 	print "extent : %s" % cursor.extent
-	print_type_status(cursor.type)
-	print_type_status(cursor.result_type, "result_type")
-	if cursor.kind.is_declaration():
-		print_type_status(cursor.underlying_typedef_type, "underlying_typedef_type")
-	print " "
+	if cursor:
+		print "---- %s ----" % status
+		print "location : %s" % cursor.location
+		print "displayname : %s" % cursor.displayname
+		print "spelling : %s" % cursor.spelling
+		print "kind : %s" % cursor.kind.name
+# 		print "extent : %s" % cursor.extent
+		print_type_status(cursor.type)
+		print_type_status(cursor.result_type, "result_type")
+		if cursor.kind.is_declaration():
+			print_type_status(cursor.underlying_typedef_type, "underlying_typedef_type")
+		print " "
 
 
 def print_status(source, filename, options, line, col):
@@ -86,5 +89,42 @@ def print_status(source, filename, options, line, col):
 	cursor = Cursor.from_location(tu, location)
 	print_cursor_status(cursor)
 	print_cursor_status(cursor.get_definition(), "cursor definition")
+
+
+def type_context(type):
+	return {
+		"spelling" : type_spelling(type),
+		"canonical_spelling" : type_spelling(type.get_canonical()),
+		"kind" : type.kind.name
+	}
+
+
+def location_context(location):
+	return {
+		"file" : location.file.name,
+		"line" : location.line,
+		"column" : location.column,
+	}
+
+def cursor_context(cursor):
+	result = {
+		"displayname" : cursor.displayname,
+		"kind" : cursor.kind.name,
+		"location" : location_context(cursor.location),
+		"type" : type_context(cursor.type),
+		"result_type" : type_context(cursor.result_type),
+	}
+	return result
+
+
+
+def context(source, filename, options, line, col):
+	index = Index.create()
+	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	location = tu.get_location(filename, (line, col))
+	cursor = Cursor.from_location(tu, location)
+	result = cursor_context(cursor)
+	return result
+
 
 
