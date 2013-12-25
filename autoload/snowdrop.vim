@@ -166,11 +166,19 @@ function! snowdrop#typeof(context)
 	if empty(result)
 		return {}
 	endif
-	if result.type.kind == "FUNCTIONPROTO"
-		return result.result_type
+	if result.kind ==# "MEMBER_REF_EXPR" && result.definition.type.kind ==# "FUNCTIONPROTO"
+		return result.definition.type
 	else
 		return result.type
 	endif
+
+" 	if result.kind ==# "MEMBER_REF_EXPR" && result.definition.type.kind ==# "FUNCTIONPROTO"
+" 		return result.definition.result_type
+" 	elseif result.type.kind == "FUNCTIONPROTO"
+" 		return result.result_type
+" 	else
+" 		return result.type
+" 	endif
 endfunction
 
 function! snowdrop#typeof_in_cursor(...)

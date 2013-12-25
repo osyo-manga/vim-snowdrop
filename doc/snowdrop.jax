@@ -28,10 +28,13 @@ Requirement:
 ------------------------------------------------------------------------------
 コマンド					*snowdrop-commands*
 
-:SnowdropGotoDefinitionInCursor			*:SnowdropGotoDefinitionInCursor*
+:SnowdropGotoDefinition				*:SnowdropGotoDefinition*
 	カーソルの宣言位置へと移動します。
 	この時に別のファイルを開く場合は |g:snowdrop#goto_definition_open_cmd|
 	に設定されているコマンドを使用して開かれます。
+
+:SnowdropEchoTypeof				*:SnowdropEchoTypeof*
+	カーソル下の型情報を出力します。
 
 ------------------------------------------------------------------------------
 関数						*snowdrop-functions*

@@ -108,16 +108,18 @@ def location_context(location):
 		}
 	return {}
 
-def cursor_context(cursor):
-	result = {
-		"displayname" : cursor.displayname,
-		"kind" : cursor.kind.name,
-		"location" : location_context(cursor.location),
-		"type" : type_context(cursor.type),
-		"result_type" : type_context(cursor.result_type),
-	}
-	return result
 
+def cursor_context(cursor):
+	if cursor:
+		result = {
+			"displayname" : cursor.displayname,
+			"kind" : cursor.kind.name,
+			"location" : location_context(cursor.location),
+			"type" : type_context(cursor.type),
+			"result_type" : type_context(cursor.result_type),
+		}
+		return result
+	return {}
 
 
 def context(source, filename, options, line, col):
@@ -126,6 +128,7 @@ def context(source, filename, options, line, col):
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
 	result = cursor_context(cursor)
+	result["definition"] = cursor_context(cursor.get_definition())
 	return result
 
 
