@@ -102,14 +102,36 @@ function! snowdrop#current_includes(...)
 endfunction
 
 
-function! snowdrop#definition(context)
-	return snowdrop#libclang#definition(
+function! snowdrop#context(context)
+	return snowdrop#libclang#context(
 \		a:context.source,
 \		a:context.filename,
 \		get(a:context, "option"),
 \		a:context.line,
 \		a:context.col,
 \	)
+endfunction
+
+
+function! snowdrop#context_in_cursor(...)
+	return snowdrop#context(snowdrop#context#cursor(get(a:, 1, {})))
+endfunction
+
+
+function! snowdrop#definition(context)
+	let definition = snowdrop#context(a:context).definition
+	if empty(definition)
+		return ["", 0, 0]
+	endif
+	let location = definition.location
+	return [location.file, location.line, location.column]
+" 	return snowdrop#libclang#definition(
+" \		a:context.source,
+" \		a:context.filename,
+" \		get(a:context, "option"),
+" \		a:context.line,
+" \		a:context.col,
+" \	)
 endfunction
 
 
@@ -146,22 +168,6 @@ endfunction
 
 function! snowdrop#print_staus_in_cursor(...)
 	call snowdrop#print_status(snowdrop#context#cursor(get(a:, 1, {})))
-endfunction
-
-
-function! snowdrop#context(context)
-	return snowdrop#libclang#context(
-\		a:context.source,
-\		a:context.filename,
-\		get(a:context, "option"),
-\		a:context.line,
-\		a:context.col,
-\	)
-endfunction
-
-
-function! snowdrop#context_in_cursor(...)
-	return snowdrop#context(snowdrop#context#cursor(get(a:, 1, {})))
 endfunction
 
 

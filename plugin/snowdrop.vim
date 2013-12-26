@@ -11,7 +11,7 @@ set cpo&vim
 command! -bar SnowdropGotoDefinition
 \	call snowdrop#goto_definition_in_cursor()
 
-nnoremap <Plug>(snowdrop-goto-definition) :<C-u>SnowdropGotoDefinition<CR>
+nnoremap <silent> <Plug>(snowdrop-goto-definition) :<C-u>SnowdropGotoDefinition<CR>
 
 
 function! s:typeof()

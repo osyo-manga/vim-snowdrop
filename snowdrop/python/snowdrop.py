@@ -102,7 +102,7 @@ def type_context(type):
 def location_context(location):
 	if location.file:
 		return {
-			"file" : "",
+			"file" : location.file.name,
 			"line" : location.line,
 			"column" : location.column,
 		}
@@ -117,7 +117,9 @@ def cursor_context(cursor):
 			"location" : location_context(cursor.location),
 			"type" : type_context(cursor.type),
 			"result_type" : type_context(cursor.result_type),
+# 			"definition" : cursor_context(cursor.get_definition()),
 		}
+
 		return result
 	return {}
 
