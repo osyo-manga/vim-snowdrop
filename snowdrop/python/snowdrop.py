@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*
+
 import clang.cindex
 from clang.cindex import Index
 from clang.cindex import Config
@@ -20,7 +22,7 @@ clang.cindex.functionList.append(
    clang.cindex._CXString.from_result),
 )
 
-
+Config.set_compatibility_check(False)
 
 def set_library_path(path):
 	if path != "":
