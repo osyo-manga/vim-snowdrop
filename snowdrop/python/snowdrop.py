@@ -1,25 +1,32 @@
 # -*- coding: utf-8 -*
 
-import clang.cindex
-from clang.cindex import Index
-from clang.cindex import Config
-from clang.cindex import Cursor
-from clang.cindex import SourceLocation
+import snowdrop_clang.clang.cindex
+from snowdrop_clang import clang
 
-clang.cindex.functionList.append(
+
+from snowdrop_clang.clang.cindex import Index
+from snowdrop_clang.clang.cindex import Config
+from snowdrop_clang.clang.cindex import Cursor
+from snowdrop_clang.clang.cindex import SourceLocation
+from snowdrop_clang.clang.cindex import functionList
+from snowdrop_clang.clang.cindex import _CXString
+from snowdrop_clang.clang.cindex import Type
+
+
+functionList.append(
   ("clang_getClangVersion",
    [],
-   clang.cindex._CXString,
-   clang.cindex._CXString.from_result
+   _CXString,
+   _CXString.from_result
    ),
 )
 
 
-clang.cindex.functionList.append(
+functionList.append(
   ("clang_getTypeSpelling",
-   [clang.cindex.Type],
-   clang.cindex._CXString,
-   clang.cindex._CXString.from_result),
+   [Type],
+   _CXString,
+   _CXString.from_result),
 )
 
 Config.set_compatibility_check(False)
