@@ -25,5 +25,9 @@ command! -bar SnowdropEchoTypeof
 \	echo s:typeof()
 
 
+command! -bar SnowdropEchoIncludes
+\	echo join(sort(snowdrop#current_includes()), "\n")
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

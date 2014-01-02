@@ -36,6 +36,10 @@ Requirement:
 :SnowdropEchoTypeof				*:SnowdropEchoTypeof*
 	カーソル下の型情報を出力します。
 
+:SnowdropEchoIncludes				*:SnowdropEchoIncludes*
+	現在のバッファがインクルードしているヘッダーファイルの一覧を出力しま
+	す。
+
 ------------------------------------------------------------------------------
 関数						*snowdrop-functions*
 
