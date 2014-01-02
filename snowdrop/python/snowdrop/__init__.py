@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*
+from pprint import pprint
 
-import snowdrop_clang.clang.cindex
-from snowdrop_clang import clang
+import snowdrop.clang.cindex
 
 
-from snowdrop_clang.clang.cindex import Index
-from snowdrop_clang.clang.cindex import Config
-from snowdrop_clang.clang.cindex import Cursor
-from snowdrop_clang.clang.cindex import SourceLocation
-from snowdrop_clang.clang.cindex import functionList
-from snowdrop_clang.clang.cindex import _CXString
-from snowdrop_clang.clang.cindex import Type
+from snowdrop.clang.cindex import Index
+from snowdrop.clang.cindex import Config
+from snowdrop.clang.cindex import Cursor
+from snowdrop.clang.cindex import SourceLocation
+from snowdrop.clang.cindex import functionList
+from snowdrop.clang.cindex import _CXString
+from snowdrop.clang.cindex import Type
 
 
 functionList.append(
@@ -118,6 +118,13 @@ def location_context(location):
 	return {}
 
 
+
+def extent_context(extent):
+	return {
+		"start" : location_context(extent.start),
+		"end"   : location_context(extent.end),
+	}
+
 def cursor_context(cursor):
 	if cursor:
 		result = {
@@ -126,6 +133,7 @@ def cursor_context(cursor):
 			"location" : location_context(cursor.location),
 			"type" : type_context(cursor.type),
 			"result_type" : type_context(cursor.result_type),
+			"extent" : extent_context(cursor.extent),
 # 			"definition" : cursor_context(cursor.get_definition()),
 		}
 
@@ -140,7 +148,12 @@ def context(source, filename, options, line, col):
 	cursor = Cursor.from_location(tu, location)
 	result = cursor_context(cursor)
 	result["definition"] = cursor_context(cursor.get_definition())
+	result["semantic_parent"] = cursor_context(cursor.semantic_parent)
+	result["lexical_parent"] = cursor_context(cursor.lexical_parent)
+	result["referenced"] = cursor_context(cursor.referenced)
 	return result
 
 
+
+__all__ = ['clang.cindex']
 
