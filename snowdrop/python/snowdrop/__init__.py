@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*
+import sys
+import os
 from pprint import pprint
+
+sys.path.insert(0, os.path.dirname(__file__))
 
 import snowdrop.clang.cindex
 
+sys.path.remove(os.path.dirname(__file__))
 
 from snowdrop.clang.cindex import Index
 from snowdrop.clang.cindex import Config
@@ -11,6 +16,7 @@ from snowdrop.clang.cindex import SourceLocation
 from snowdrop.clang.cindex import functionList
 from snowdrop.clang.cindex import _CXString
 from snowdrop.clang.cindex import Type
+from snowdorp.clang.cindex import TranslationUnit
 
 
 functionList.append(
@@ -31,10 +37,13 @@ functionList.append(
 
 Config.set_compatibility_check(False)
 
+
 def set_library_path(path):
+	global index
 	if path != "":
 		Config.loaded = False
 		Config.set_library_path(path)
+		index = Index.create()
 
 def get_library_file():
 	conf = Config()
@@ -46,15 +55,28 @@ def get_clang_version():
 	return conf.lib.clang_getClangVersion()
 
 
+index = Index.create()
+
+EditingTranslationUnitOptions = (
+	  TranslationUnit.PARSE_PRECOMPILED_PREAMBLE
+	| TranslationUnit.PARSE_CACHE_COMPLETION_RESULTS
+	| TranslationUnit.PARSE_INCLUDE_BRIEF_COMMENTS_IN_CODE_COMPLETION
+)
+
+
+def parse(source, options, name):
+	global index
+	global EditingTranslationUnitOptions
+	return index.parse(name, args = options, unsaved_files = [ (name, source) ], options=EditingTranslationUnitOptions)
+
+
 def includes(source, options, name):
-	index = Index.create()
-	tree = index.parse(name, args = options, unsaved_files = [ (name, source) ])
+	tree = parse(source, options, name)
 	return list(set(map((lambda x: x.source.name), tree.get_includes())))
 
 
 def definition(source, filename, options, line, col):
-	index = Index.create()
-	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	tu = parse(source, options, filename)
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
 	defs = [cursor.get_definition(), cursor.referenced]
@@ -92,8 +114,7 @@ def print_cursor_status(cursor, status = "cursor"):
 
 
 def print_status(source, filename, options, line, col):
-	index = Index.create()
-	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	tu = parse(source, options, filename)
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
 	print_cursor_status(cursor)
@@ -118,12 +139,16 @@ def location_context(location):
 	return {}
 
 
-
 def extent_context(extent):
 	return {
 		"start" : location_context(extent.start),
 		"end"   : location_context(extent.end),
 	}
+
+
+def cursor_arguments_type_context(cursor):
+	return ([cursor_context(x)["type"] for x in cursor.get_arguments()])
+
 
 def cursor_context(cursor):
 	if cursor:
@@ -133,6 +158,7 @@ def cursor_context(cursor):
 			"location" : location_context(cursor.location),
 			"type" : type_context(cursor.type),
 			"result_type" : type_context(cursor.result_type),
+# 			"arguments_type" : cursor_arguments_type_context(cursor),
 			"extent" : extent_context(cursor.extent),
 # 			"definition" : cursor_context(cursor.get_definition()),
 		}
@@ -142,14 +168,13 @@ def cursor_context(cursor):
 
 
 def context(source, filename, options, line, col):
-	index = Index.create()
-	tu = index.parse(filename, args = options, unsaved_files = [ (filename, source) ])
+	tu = parse(source, options, filename)
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
 	result = cursor_context(cursor)
 	result["definition"] = cursor_context(cursor.get_definition())
 	result["semantic_parent"] = cursor_context(cursor.semantic_parent)
-	result["lexical_parent"] = cursor_context(cursor.lexical_parent)
+# 	result["lexical_parent"] = cursor_context(cursor.lexical_parent)
 	result["referenced"] = cursor_context(cursor.referenced)
 	return result
 
