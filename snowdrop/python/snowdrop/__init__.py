@@ -16,7 +16,7 @@ from snowdrop.clang.cindex import SourceLocation
 from snowdrop.clang.cindex import functionList
 from snowdrop.clang.cindex import _CXString
 from snowdrop.clang.cindex import Type
-from snowdorp.clang.cindex import TranslationUnit
+from snowdrop.clang.cindex import TranslationUnit
 
 
 functionList.append(
