@@ -41,7 +41,12 @@ function! snowdrop#context#current(...)
 	let base = get(a:, 1, {})
 	let filename = substitute(fnamemodify(bufname("%"), ":p"), '\\', '/', 'g')
 	if filereadable(filename)
-		let base = snowdrop#context#file(filename, base)
+		if &modified
+			let base = snowdrop#context#buffer("%", base)
+			let base.filename = filename
+		else
+			let base = snowdrop#context#file(filename, base)
+		endif
 	else
 		let base = snowdrop#context#buffer("%", base)
 	endif
