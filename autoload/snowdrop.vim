@@ -83,7 +83,7 @@ endfunction
 
 function! snowdrop#current_command_opt(...)
 	let option = get(a:, 1, "")
-	return snowdrop#to_include_opt(snowdrop#current_include_paths()) . " " . s:command_option(&filetype) . " " . option
+	return s:command_option(&filetype) . " " . snowdrop#to_include_opt(snowdrop#current_include_paths()) . " " . option
 endfunction
 
 
@@ -194,6 +194,22 @@ endfunction
 
 function! snowdrop#typeof_in_cursor(...)
 	return snowdrop#typeof(snowdrop#context#cursor(get(a:, 1, {})))
+endfunction
+
+
+function! snowdrop#code_complete(context)
+	return snowdrop#libclang#code_complete(
+\		a:context.source,
+\		a:context.filename,
+\		get(a:context, "option"),
+\		a:context.line,
+\		a:context.col + 1,
+\	)
+endfunction
+
+
+function! snowdrop#code_complete_in_cursor(...)
+	return snowdrop#code_complete(snowdrop#context#cursor(get(a:, 1, {})))
 endfunction
 
 

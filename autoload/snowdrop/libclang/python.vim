@@ -107,9 +107,22 @@ function! snowdrop#libclang#python#context(source, filename, option, line, col)
 endfunction
 
 
+function! snowdrop#libclang#python#code_complete(source, filename, option, line, col)
+	let option = split(a:option, ' ')
+	return pyeval('snowdrop.code_complete(
+\		vim.eval("a:source"),
+\		vim.eval("a:filename"),
+\		vim.eval("option"),
+\		int(vim.eval("a:line")),
+\		int(vim.eval("a:col")) )
+\	')
+endfunction
+
+
 if expand("%:p") == expand("<sfile>:p")
 	call snowdrop#libclang#python#load(snowdrop#get_libclang_filename())
 endif
+
 
 
 let &cpo = s:save_cpo

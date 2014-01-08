@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*
 import sys
 import os
+import vim
 from pprint import pprint
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -13,10 +14,12 @@ from snowdrop.clang.cindex import Index
 from snowdrop.clang.cindex import Config
 from snowdrop.clang.cindex import Cursor
 from snowdrop.clang.cindex import SourceLocation
+from snowdrop.clang.cindex import TranslationUnit
 from snowdrop.clang.cindex import functionList
 from snowdrop.clang.cindex import _CXString
+from snowdrop.clang.cindex import CursorKind
+from snowdrop.clang.cindex import CodeCompletionResults
 from snowdrop.clang.cindex import Type
-from snowdrop.clang.cindex import TranslationUnit
 
 
 functionList.append(
@@ -35,6 +38,30 @@ functionList.append(
    _CXString.from_result),
 )
 
+
+# functionList.append(
+#   ("clang_codeCompleteGetContainerUSR",
+#    [CodeCompletionResults],
+#    _CXString,
+#    _CXString.from_result),
+# )
+#
+#
+# functionList.append(
+#   ("clang_codeCompleteGetContexts",
+#    [CodeCompletionResults],
+#    clang.cindex.c_ulonglong),
+# )
+#
+#
+# functionList.append(
+#   ("clang_codeCompleteGetContainerKind",
+#    [CodeCompletionResults, clang.cindex.c_void_p],
+#    CursorKind)
+# )
+
+
+
 Config.set_compatibility_check(False)
 
 
@@ -43,7 +70,7 @@ def set_library_path(path):
 	if path != "":
 		Config.loaded = False
 		Config.set_library_path(path)
-		index = Index.create()
+	index = Index.create()
 
 def get_library_file():
 	conf = Config()
@@ -55,11 +82,10 @@ def get_clang_version():
 	return conf.lib.clang_getClangVersion()
 
 
-index = Index.create()
-
 EditingTranslationUnitOptions = (
 	  TranslationUnit.PARSE_PRECOMPILED_PREAMBLE
 	| TranslationUnit.PARSE_CACHE_COMPLETION_RESULTS
+	| TranslationUnit.PARSE_INCOMPLETE
 	| TranslationUnit.PARSE_INCLUDE_BRIEF_COMMENTS_IN_CODE_COMPLETION
 )
 
@@ -67,7 +93,8 @@ EditingTranslationUnitOptions = (
 def parse(source, options, name):
 	global index
 	global EditingTranslationUnitOptions
-	return index.parse(name, args = options, unsaved_files = [ (name, source) ], options=EditingTranslationUnitOptions)
+	return index.parse(name, args = options, unsaved_files = [ (name, source) ])
+# 	return index.parse(name, args = options, unsaved_files = [ (name, source) ], options=EditingTranslationUnitOptions)
 
 
 def includes(source, options, name):
@@ -168,6 +195,7 @@ def cursor_context(cursor):
 
 
 def context(source, filename, options, line, col):
+	index = Index.create()
 	tu = parse(source, options, filename)
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
@@ -178,6 +206,38 @@ def context(source, filename, options, line, col):
 	result["referenced"] = cursor_context(cursor.referenced)
 	return result
 
+
+def completion_string_to_dict(string):
+	info = ""
+	complete_word = ""
+	for chunk in string:
+		if chunk.isKindTypedText():
+			complete_word = chunk.spelling
+		if chunk.isKindResultType():
+			info += chunk.spelling + " "
+		else:
+			info += chunk.spelling
+# 		print "%s : %s" % (chunk.kind, chunk.spelling)
+	return {
+		"info" : info,
+		"complete_word" : complete_word,
+		"availability" : str(string.availability),
+		"priority" : str(string.priority),
+	}
+
+
+def completion_result_to_dict(result):
+	dict = completion_string_to_dict(result.string)
+	dict["kind"] = result.kind.name
+	return dict
+
+
+def code_complete(source, filename, options, line, col):
+	tu = parse(source, options, filename)
+	completion = tu.codeComplete(filename, line, col)
+	
+# 	print clang.cindex.conf.lib.clang_codeCompleteGetContainerKind(completion, None)
+	return [completion_result_to_dict(x) for x in completion.results]
 
 
 __all__ = ['clang.cindex']

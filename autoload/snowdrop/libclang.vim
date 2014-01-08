@@ -55,6 +55,10 @@ function! snowdrop#libclang#context(source, filename, option, line, col)
 	return s:binding_call("context", a:source, a:filename, a:option, a:line, a:col)
 endfunction
 
+function! snowdrop#libclang#code_complete(source, filename, option, line, col)
+	return s:binding_call("code_complete", a:source, a:filename, a:option, a:line, a:col)
+endfunction
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
