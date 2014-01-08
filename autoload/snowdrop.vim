@@ -208,8 +208,26 @@ function! snowdrop#code_complete(context)
 endfunction
 
 
+function! snowdrop#print_type(type)
+	if a:type.spelling ==# a:type.canonical_spelling
+		return printf("type : %s", a:type.spelling)
+	endif
+	return printf("type      : %s\n", a:type.spelling)
+\		.  printf("canonical : %s", a:type.canonical_spelling)
+endfunction
+
+
 function! snowdrop#code_complete_in_cursor(...)
 	return snowdrop#code_complete(snowdrop#context#cursor(get(a:, 1, {})))
+endfunction
+
+
+function! snowdrop#ballonexpr_typeof()
+	let type = snowdrop#typeof(snowdrop#context#buffer(v:beval_bufnr, {
+\		"line" : v:beval_lnum,
+\		"col"  : v:beval_col,
+\	}))
+	return snowdrop#print_type(type)
 endfunction
 
 

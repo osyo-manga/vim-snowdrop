@@ -87,6 +87,16 @@ snowdrop#goto_definition_in_cursor([{opencmd}, {context}])
 	デフォルトでは |g:snowdrop#goto_definition_open_cmd| が使用される。
 
 
+snowdrop#ballonexpr_typeof()			*snowdrop#ballonexpr_typeof()*
+	カーソル下の型情報を |balloon-eval| で表示するための関数です。
+	表示される情報は |::SnowdropEchoTypeof| と同等です。
+	|bexpr| に設定を行い使用します。
+Example: >
+	set bexpr=snowdrop#ballonexpr_typeof()
+	set ballooneval
+<
+
+
 ==============================================================================
 設定						*snowdrop-setting*
 
