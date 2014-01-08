@@ -36,6 +36,9 @@ Requirement:
 :SnowdropEchoTypeof				*:SnowdropEchoTypeof*
 	カーソル下の型情報を出力します。
 
+:SnowdropEchoResultTypeof			*:SnowdropEchoResultTypeof*
+	カーソル下の関数の戻り値型情報を出力します。
+
 :SnowdropEchoIncludes				*:SnowdropEchoIncludes*
 	現在のバッファがインクルードしているヘッダーファイルの一覧を出力しま
 	す。
