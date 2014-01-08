@@ -62,13 +62,13 @@ functionList.append(
 
 
 
-Config.set_compatibility_check(False)
 
 
 def set_library_path(path):
 	global index
 	if path != "":
 		Config.loaded = False
+		Config.set_compatibility_check(False)
 		Config.set_library_path(path)
 	index = Index.create()
 
@@ -234,7 +234,7 @@ def completion_result_to_dict(result):
 
 def code_complete(source, filename, options, line, col):
 	tu = parse(source, options, filename)
-	completion = tu.codeComplete(filename, line, col)
+	completion = tu.codeComplete(filename, line, col, unsaved_files = [ (filename, source) ])
 	
 # 	print clang.cindex.conf.lib.clang_codeCompleteGetContainerKind(completion, None)
 	return [completion_result_to_dict(x) for x in completion.results]
