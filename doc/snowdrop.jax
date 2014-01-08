@@ -150,6 +150,24 @@ source			String		(Required)
 option			String		(Optional)
 			Clang のコマンドオプション
 
+==============================================================================
+marching.vim						*snowdrop-marching*
+
+|snowdrop.vim| を利用したコード補完を |marching.vim| で使用することができま
+す。
+
+- marching.vim - https://github.com/osyo-manga/vim-marching
+
+|marching.vim| で |snowdrop.vim| を利用したコード補完を使用したい場合は下記の設定を
+行って下さい。
+
+Example: >
+	let g:marching_backend = "snowdrop"
+<
+
+また、|snowdrop.vim| でコード補完を行う場合は補完中にキー入力は受け付けないの
+で注意して下さい。
+
 
 
 
