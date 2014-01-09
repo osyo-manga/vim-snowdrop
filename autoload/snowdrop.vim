@@ -50,40 +50,12 @@ function! snowdrop#check()
 endfunction
 
 
-let g:snowdrop#include_paths = get(g:, "snowdrop#include_paths", {})
-
-
-function! snowdrop#current_include_paths()
-	let filetype = &filetype
-	let paths = get(g:snowdrop#include_paths, filetype, [])
-	return filter(split(&path, ',') + paths, 'isdirectory(v:val) && v:val !~ ''\./''')
-endfunction
-
-
-function! snowdrop#to_include_opt(paths)
-	let include_opt = join(filter(a:paths, 'v:val !=# "."'), ' -I')
-	if empty(include_opt)
-		return ""
-	endif
-	return "-I" . include_opt
-endfunction
-
-
-
+let g:snowdrop#include_paths   = get(g:, "snowdrop#include_paths", {})
 let g:snowdrop#command_options = get(g:, "snowdrop#command_options", {})
 
-let s:command_options = {
-\	"cpp" : "-std=c++1y",
-\}
 
-function! s:command_option(filetype)
-	return get(extend(s:command_options, get(g:, "snowdrop#command_options", {})), a:filetype, "")
-endfunction
-
-
-function! snowdrop#current_command_opt(...)
-	let option = get(a:, 1, "")
-	return s:command_option(&filetype) . " " . snowdrop#to_include_opt(snowdrop#current_include_paths()) . " " . option
+function! snowdrop#current_command_option()
+	return snowdrop#command_option#bufnr(bufnr("%"))
 endfunction
 
 

@@ -143,8 +143,12 @@ Example: >
 	let g:snowdrop#command_options = {
 	\	"cpp" : "-std=c++1y",
 	\}
-
 <
+
+b:snowdrop_command_option			*b:snowdrop_command_option*
+	バッファローカルに設定する Clang のコマンドオプションです。
+
+
 ==============================================================================
 コンテキスト						*snowdrop-context*
 

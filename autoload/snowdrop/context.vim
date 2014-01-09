@@ -24,6 +24,7 @@ function! snowdrop#context#file(file, ...)
 	return extend(base, {
 \		"filename" : a:file,
 \		"source" : join(readfile(a:file), "\n"),
+\		"option" : snowdrop#command_option#file(a:file)
 \	}, "keep")
 endfunction
 
@@ -33,6 +34,7 @@ function! snowdrop#context#buffer(bufnr, ...)
 	return extend(base, {
 \		"filename" : s:dummy_filename(getbufvar(a:bufnr, "&filetype", "")),
 \		"source" : join(getbufline(a:bufnr, 1, "$"), "\n"),
+\		"option" : snowdrop#command_option#bufnr(a:bufnr)
 \	}, "keep")
 endfunction
 
@@ -51,7 +53,7 @@ function! snowdrop#context#current(...)
 		let base = snowdrop#context#buffer("%", base)
 	endif
 	return extend(base, {
-\		"option" : snowdrop#current_command_opt()
+\		"option" : snowdrop#current_command_option()
 \	}, "keep")
 endfunction
 
