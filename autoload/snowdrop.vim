@@ -203,8 +203,20 @@ function! snowdrop#code_complete(context)
 \		a:context.filename,
 \		get(a:context, "option"),
 \		a:context.line,
-\		a:context.col + 1,
+\		a:context.col,
 \	)
+endfunction
+
+
+function! snowdrop#code_complete_in_cursor(...)
+	let context = snowdrop#context#cursor(get(a:, 1, {}))
+	let context.col += 1
+	return snowdrop#code_complete(context)
+endfunction
+
+
+function! snowdrop#code_complete_near_cursor(...)
+	return snowdrop#code_complete(snowdrop#context#code_complete(get(a:, 1, {})))
 endfunction
 
 
@@ -214,11 +226,6 @@ function! snowdrop#print_type(type)
 	endif
 	return printf("type      : %s\n", a:type.spelling)
 \		.  printf("canonical : %s", a:type.canonical_spelling)
-endfunction
-
-
-function! snowdrop#code_complete_in_cursor(...)
-	return snowdrop#code_complete(snowdrop#context#cursor(get(a:, 1, {})))
 endfunction
 
 
