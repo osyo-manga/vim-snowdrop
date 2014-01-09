@@ -61,7 +61,8 @@ functionList.append(
 # )
 
 
-
+if not Config.loaded:
+	Config.set_compatibility_check(False)
 
 
 def set_library_path(path):
