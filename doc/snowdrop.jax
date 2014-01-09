@@ -183,6 +183,15 @@ Example: >
 で注意して下さい。
 
 
+==============================================================================
+unite-sources					*snowdrop-unite-sources*
+
+|snowdrop.vim| には |unite-sources| がいくつか付属しています。
+
+						*unite-source-snowdrop/includes*
+snowdrop/includes	カレントバッファのインクルードファイルの一覧を出力し
+			ます。
+			|:SnowdropEchoIncludes| と同等のものが出力されます。
 
 
 ==============================================================================
