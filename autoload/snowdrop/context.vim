@@ -74,5 +74,15 @@ function! snowdrop#context#cpp_source(source, ...)
 endfunction
 
 
+function! snowdrop#context#code_complete(...)
+	let base = get(a:, 1, {})
+	let pos = searchpos('\(->\)\|\.\|\(::\)\|;\|^', 'cbWen')
+	return extend({
+\		"line" : pos[0],
+\		"col"  : pos[1] + 1,
+\	}, snowdrop#context#current(base))
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
