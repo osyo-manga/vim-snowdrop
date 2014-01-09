@@ -36,6 +36,7 @@ endfunction
 
 
 function! snowdrop#command_option#file(file)
+	" unimplemented
 	return ""
 endfunction
 
