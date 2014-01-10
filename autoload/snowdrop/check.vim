@@ -15,7 +15,7 @@ function! s:message(result, check)
 endfunction
 
 
-function! snowdrop#check#version()
+function! snowdrop#check#load()
 	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
 endfunction
 
@@ -43,7 +43,7 @@ endfunction
 function! snowdrop#check#all()
 	echo snowdrop#get_libclang_version()
 	let result = join([
-\		s:message(snowdrop#check#version(), "version"),
+\		s:message(snowdrop#check#load(), "load"),
 \		s:message(snowdrop#check#includes(), "includes"),
 \		s:message(snowdrop#check#typeof(), "typeof"),
 \		s:message(snowdrop#check#code_complete(), "code_complete"),
