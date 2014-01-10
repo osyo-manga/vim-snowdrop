@@ -46,7 +46,8 @@ endfunction
 
 
 function! snowdrop#check()
-	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
+	call snowdrop#check#all()
+" 	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
 endfunction
 
 
@@ -57,7 +58,6 @@ let g:snowdrop#command_options = get(g:, "snowdrop#command_options", {})
 function! snowdrop#current_command_option()
 	return snowdrop#command_option#bufnr(bufnr("%"))
 endfunction
-
 
 
 function! snowdrop#includes(context)
