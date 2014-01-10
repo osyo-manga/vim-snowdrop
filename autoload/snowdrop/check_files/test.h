@@ -2,4 +2,6 @@
 
 struct X{
 	int value;
+	void
+	func(){}
 };

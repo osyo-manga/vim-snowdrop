@@ -34,12 +34,19 @@ function! snowdrop#check#typeof()
 endfunction
 
 
+function! snowdrop#check#code_complete()
+	let result = snowdrop#code_complete_in_cursor(snowdrop#context#file(s:test_file, { "line" : 7, "col" : 3 }))
+	return sort(map(result, "v:val.complete_word")) == ['X', 'func', 'operator=', 'value', '~X']
+endfunction
+
+
 function! snowdrop#check#all()
 	echo snowdrop#get_libclang_version()
 	let result = join([
 \		s:message(snowdrop#check#version(), "version"),
 \		s:message(snowdrop#check#includes(), "includes"),
 \		s:message(snowdrop#check#typeof(), "typeof"),
+\		s:message(snowdrop#check#code_complete(), "code_complete"),
 \	], "\n")
 	echo result
 endfunction
