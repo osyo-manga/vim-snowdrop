@@ -99,8 +99,12 @@ def parse(source, options, name):
 
 
 def includes(source, options, name):
-	tree = parse(source, options, name)
-	return list(set(map((lambda x: x.source.name), tree.get_includes())))
+	tu = parse(source, options, name)
+	result = []
+	for include in tu.get_includes():
+		result.append(include.source.name)
+		result.append(include.include.name)
+	return list(set(result))
 
 
 def definition(source, filename, options, line, col):
