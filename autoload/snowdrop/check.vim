@@ -4,7 +4,6 @@ set cpo&vim
 
 let s:root = expand("<sfile>:p:h")
 let s:test_file = s:root . "/check_files/test.cpp"
-" echo s:test_source
 
 
 function! s:message(result, check)
@@ -22,10 +21,10 @@ endfunction
 
 
 function! snowdrop#check#includes()
-	let result = snowdrop#includes(snowdrop#context#file(s:test_file))
+	let result = sort(snowdrop#includes(snowdrop#context#file(s:test_file)))
 	return len(result) == 2
-\		&& fnamemodify(result[0], ":t") ==# "test2.h"
-\		&& fnamemodify(result[1], ":t") ==# "test.h"
+\		&& fnamemodify(result[0], ":t") ==# "test.h"
+\		&& fnamemodify(result[1], ":t") ==# "test2.h"
 endfunction
 
 
@@ -36,6 +35,7 @@ endfunction
 
 
 function! snowdrop#check#all()
+	echo snowdrop#get_libclang_version()
 	let result = join([
 \		s:message(snowdrop#check#version(), "version"),
 \		s:message(snowdrop#check#includes(), "includes"),
