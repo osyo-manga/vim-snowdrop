@@ -16,7 +16,9 @@ endfunction
 
 
 function! snowdrop#check#load()
-	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
+	let v  = snowdrop#get_libclang_version()
+	let v2 = snowdrop#libclang#get_clang_version()
+	return v != "" && v2 != "" && v == v2
 endfunction
 
 
