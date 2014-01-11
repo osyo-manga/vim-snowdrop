@@ -36,7 +36,8 @@ endfunction
 function! snowdrop#get_libclang_version(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
 	if empty(executable(libclang))
-		return snowdrop#echoerr("Not found libclang file : " . libclang)
+		call snowdrop#echoerr("Not found libclang file : " . libclang)
+		return snowdrop#echoerr("Please set 'g:snowdrop#libclang_path'")
 	endif
 	if s:is_windows
 		let libclang = matchstr(libclang, '.*\ze\.dll$')
@@ -46,7 +47,10 @@ endfunction
 
 
 function! snowdrop#check()
-	call snowdrop#check#all()
+	try
+		call snowdrop#check#all()
+	catch
+	endtry
 " 	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
 endfunction
 
