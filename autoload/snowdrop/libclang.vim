@@ -20,16 +20,9 @@ endfunction
 
 function! snowdrop#libclang#load(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
-	if !has("python")
-		call snowdrop#echoerr("Requires +python.")
-		return
-	endif
 	if executable(libclang) != 1
-		call snowdrop#echoerr("Not found libclang : " . libclang)
-		return
+		return snowdrop#echoerr("Not found libclang : " . libclang)
 	endif
-
-" 	call s:binding_call("load", libclang)
 endfunction
 
 call snowdrop#libclang#load(snowdrop#get_libclang_filename())

@@ -37,8 +37,7 @@ endfunction
 
 function! snowdrop#libclang#python#load(libclang)
  	if !has("python")
-		call snowdrop#echoerr("Requires +python.")
-		return
+		return snowdrop#echoerr("Requires +python.")
 	endif
 
 	py import vim
