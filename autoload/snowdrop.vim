@@ -11,7 +11,14 @@ function! snowdrop#echoerr(str)
 endfunction
 
 
-let g:snowdrop#libclang_path = get(g:, "snowdrop#libclang_path", "")
+let g:snowdrop#libclang_directory = get(g:, "snowdrop#libclang_directory", "")
+
+" deprecate
+" let g:snowdrop#libclang_path = get(g:, "snowdrop#libclang_path", "")
+
+function! s:liclang_dir()
+	return get(g:, "snowdrop#libclang_path", g:snowdrop#libclang_directory)
+endfunction
 
 let s:is_windows = has('win16') || has('win32') || has('win64') || has('win95')
 let s:is_mac = has('mac') || has('macunix') || has('gui_macvim')
@@ -26,10 +33,10 @@ function! snowdrop#get_libclang_filename()
 	else
 		let file = g:snowdrop#libclang_file
 	endif
-	if empty(g:snowdrop#libclang_path)
+	if empty(s:liclang_dir())
 		return file
 	endif
-	return g:snowdrop#libclang_path . "/" . file
+	return s:liclang_dir() . "/" . file
 endfunction
 
 
@@ -37,7 +44,7 @@ function! snowdrop#get_libclang_version(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
 	if empty(executable(libclang))
 		call snowdrop#echoerr("Not found libclang file : " . libclang)
-		return snowdrop#echoerr("Please set 'g:snowdrop#libclang_path'")
+		return snowdrop#echoerr("Please set 'g:snowdrop#libclang_directory'")
 	endif
 	if s:is_windows
 		let libclang = matchstr(libclang, '.*\ze\.dll$')

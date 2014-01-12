@@ -103,11 +103,14 @@ Example: >
 ------------------------------------------------------------------------------
 snowdrop の変数					*snowdrop-variables*
 
-g:snowdrop#libclang_path			*g:snowdrop#libclang_path*
-	libclang へのパスを設定します。
+g:snowdrop#libclang_directory			*g:snowdrop#libclang_directory*
+	libclang へのディレクトリパスを設定します。
 
 Default: >
 	let g:snowdrop#libclang_path = ""
+<
+Example: >
+	let g:snowdrop#libclang_path = "C:/llvm/bin"
 <
 
 g:snowdrop#libclang_file			*g:snowdrop#libclang_file*
