@@ -29,7 +29,8 @@ Requirement:
 コマンド					*snowdrop-commands*
 
 :SnowdropGotoDefinition				*:SnowdropGotoDefinition*
-	カーソルの宣言位置へと移動します。
+	カーソル下の単語の定義位置へ移動します。
+	定義が見つからなければ宣言位置へ移動します。
 	この時に別のファイルを開く場合は |g:snowdrop#goto_definition_open_cmd|
 	に設定されているコマンドを使用して開かれます。
 
@@ -77,12 +78,14 @@ snowdrop#current_includes([{context}])		*snowdrop#current_includes()*
 
 
 snowdrop#definition_in_cursor()			*snowdrop#definition_in_cursor()*
-	カーソルの宣言位置を次の3つの要素を持つリストで返します。
+	カーソル下の単語の定義位置を次の3つの要素を持つリストで返します。
 		[filename, line, col]
+	また、定義が見つからなければ宣言を返します。
 
 					*snowdrop#goto_definition_in_cursor()*
 snowdrop#goto_definition_in_cursor([{opencmd}, {context}])
-	カーソル位置の宣言場所へ移動する。
+	カーソル下の単語の定義場所へ移動する。
+	また、定義が見つからなければ宣言へと移動する。
 	{opencmd} は宣言場所のファイルを開く際のコマンドになる。
 	デフォルトでは |g:snowdrop#goto_definition_open_cmd| が使用される。
 

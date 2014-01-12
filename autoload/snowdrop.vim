@@ -101,9 +101,13 @@ endfunction
 
 
 function! snowdrop#definition(context)
-	let definition = snowdrop#context(a:context).definition
+	let context = snowdrop#context(a:context)
+	let definition = context.definition
 	if empty(definition)
-		return ["", 0, 0]
+		let definition = context.referenced
+		if empty(definition)
+			return ["", 0, 0]
+		endif
 	endif
 	let location = definition.location
 	return [location.file, location.line, location.column]
