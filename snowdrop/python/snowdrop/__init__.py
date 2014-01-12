@@ -200,7 +200,6 @@ def cursor_context(cursor):
 
 
 def context(source, filename, options, line, col):
-	index = Index.create()
 	tu = parse(source, options, filename)
 	location = tu.get_location(filename, (line, col))
 	cursor = Cursor.from_location(tu, location)
