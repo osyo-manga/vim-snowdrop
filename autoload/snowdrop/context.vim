@@ -41,6 +41,9 @@ endfunction
 
 function! snowdrop#context#current(...)
 	let base = get(a:, 1, {})
+	let base = extend(base, {
+\		"option" : snowdrop#current_command_option()
+\	}, "keep")
 	let filename = substitute(fnamemodify(bufname("%"), ":p"), '\\', '/', 'g')
 	if filereadable(filename)
 		if &modified
@@ -52,9 +55,7 @@ function! snowdrop#context#current(...)
 	else
 		let base = snowdrop#context#buffer("%", base)
 	endif
-	return extend(base, {
-\		"option" : snowdrop#current_command_option()
-\	}, "keep")
+	return base
 endfunction
 
 
