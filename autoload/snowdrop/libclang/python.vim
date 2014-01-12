@@ -36,6 +36,11 @@ endfunction
 
 
 function! snowdrop#libclang#python#load(libclang)
+ 	if !has("python")
+		call snowdrop#echoerr("Requires +python.")
+		return
+	endif
+
 	py import vim
 
 	call s:import(s:python_module_path, "snowdrop")
@@ -121,9 +126,7 @@ function! snowdrop#libclang#python#code_complete(source, filename, option, line,
 endfunction
 
 
-if expand("%:p") == expand("<sfile>:p")
-	call snowdrop#libclang#python#load(snowdrop#get_libclang_filename())
-endif
+call snowdrop#libclang#python#load(snowdrop#get_libclang_filename())
 
 
 

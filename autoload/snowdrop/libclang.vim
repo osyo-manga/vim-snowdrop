@@ -4,8 +4,17 @@ set cpo&vim
 
 let s:libclang_binding = "python"
 
+let g:snowdrop#libclang#libclang_binding = get(g:, "snowdrop#libclang#libclang_binding", "python")
+
+let g:snowdrop#libclang#use_libclang_bindings = get(g:, "snowdrop#libclang#use_libclang_bindings", {})
+
+
+function! s:get_binding(name)
+	return get(g:snowdrop#libclang#use_libclang_bindings, a:name, g:snowdrop#libclang#libclang_binding)
+endfunction
+
 function! s:binding_call(name, ...)
-	return call("snowdrop#libclang#" . s:libclang_binding . "#" . a:name, a:000)
+	return call("snowdrop#libclang#" . s:get_binding(a:name) . "#" . a:name, a:000)
 endfunction
 
 
@@ -20,9 +29,8 @@ function! snowdrop#libclang#load(...)
 		return
 	endif
 
-	call s:binding_call("load", libclang)
+" 	call s:binding_call("load", libclang)
 endfunction
-
 
 call snowdrop#libclang#load(snowdrop#get_libclang_filename())
 
