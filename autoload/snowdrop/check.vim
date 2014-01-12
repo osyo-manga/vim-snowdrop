@@ -6,11 +6,16 @@ let s:root = expand("<sfile>:p:h")
 let s:test_file = s:root . "/check_files/test.cpp"
 
 
-function! s:message(result, check)
-	if a:result
-		return printf("[Success] %s", a:check)
+function! s:check(checker)
+	try
+		let result = snowdrop#check#{ a:checker }()
+	catch
+		let result = 0
+	endtry
+	if result
+		return printf("[Success] %s", a:checker)
 	else
-		return printf("[Failure] %s", a:check)
+		return printf("[Failure] %s", a:checker)
 	endif
 endfunction
 
@@ -45,10 +50,10 @@ endfunction
 function! snowdrop#check#all()
 	echo snowdrop#get_libclang_version()
 	let result = join([
-\		s:message(snowdrop#check#load(), "load"),
-\		s:message(snowdrop#check#includes(), "includes"),
-\		s:message(snowdrop#check#typeof(), "typeof"),
-\		s:message(snowdrop#check#code_complete(), "code_complete"),
+\		s:check("load"),
+\		s:check("includes"),
+\		s:check("typeof"),
+\		s:check("code_complete"),
 \	], "\n")
 	echo result
 endfunction

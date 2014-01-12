@@ -51,7 +51,6 @@ function! snowdrop#check()
 		call snowdrop#check#all()
 	catch
 	endtry
-" 	return snowdrop#get_libclang_version() == snowdrop#libclang#get_clang_version()
 endfunction
 
 
