@@ -87,7 +87,7 @@ module Snowdrop
 	def self.type_context(type, cursor)
 		return {
 			:spelling => type.spelling,
-			:canonical_type => get_canonical_type(cursor).spelling,
+			:canonical_spelling => get_canonical_type(cursor).spelling,
 			:kind => TYPE_KIND_TABLE[type.kind] || "",
 		}
 	end
