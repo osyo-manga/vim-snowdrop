@@ -3,7 +3,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:command_options = {
-\	"cpp" : "-std=c++1y",
+\	"cpp" : "",
 \}
 
 
