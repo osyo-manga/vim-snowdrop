@@ -201,6 +201,9 @@ snowdrop/includes	カレントバッファのインクルードファイルの�
 			ます。
 			|:SnowdropEchoIncludes| と同等のものが出力されます。
 
+						*unite-source-snowdrop/outline*
+snowdrop/outline	カレントバッファのアウトライン一覧を出力します。
+
 
 ==============================================================================
 vim:tw=78:fo=tcq2mM:ts=8:ft=help:norl
