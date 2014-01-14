@@ -6,11 +6,12 @@ let s:root = expand("<sfile>:p:h")
 let s:test_file = s:root . "/check_files/test.cpp"
 
 
-function! s:check(checker)
+function! s:check(checker, output)
 	try
 		let result = snowdrop#check#{ a:checker }()
 	catch
 		let result = 0
+		echo v:throwpoint . " " . v:exception
 	endtry
 	if result
 		return printf("[Success] %s", a:checker)
@@ -47,13 +48,13 @@ function! snowdrop#check#code_complete()
 endfunction
 
 
-function! snowdrop#check#all()
+function! snowdrop#check#all(output)
 	echo snowdrop#get_libclang_version()
 	let result = join([
-\		s:check("load"),
-\		s:check("includes"),
-\		s:check("typeof"),
-\		s:check("code_complete"),
+\		s:check("load", a:output),
+\		s:check("includes", a:output),
+\		s:check("typeof", a:output),
+\		s:check("code_complete", a:output),
 \	], "\n")
 	echo result
 endfunction

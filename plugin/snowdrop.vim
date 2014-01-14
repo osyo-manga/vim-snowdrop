@@ -14,21 +14,24 @@ command! -bar SnowdropGotoDefinition
 nnoremap <silent> <Plug>(snowdrop-goto-definition) :<C-u>SnowdropGotoDefinition<CR>
 
 
-function! s:print_type(type)
-	if a:type.spelling ==# a:type.canonical_spelling
-		return printf("type : %s", a:type.spelling)
+command! -bar SnowdropEchoTypeof
+\	echo snowdrop#print_type(snowdrop#typeof_in_cursor())
+
+
+function! s:get_definition()
+	let context = snowdrop#context_in_cursor()
+	if !empty(context.definition)
+		return context.definition.result_type
+	elseif !empty(context.referenced)
+		return context.referenced.result_type
+	else
+		return {}
 	endif
-	return printf("type      : %s\n", a:type.spelling)
-\		.  printf("canonical : %s", a:type.canonical_spelling)
 endfunction
 
-command! -bar SnowdropEchoTypeof
-\	echo s:print_type(snowdrop#typeof_in_cursor())
-
-
 command! -bar SnowdropEchoResultTypeof
-\	echo s:print_type(get(get(snowdrop#context_in_cursor(), "definition", {}), "result_type"))
-
+\	echo snowdrop#print_type(s:get_definition())
+"
 
 command! -bar SnowdropEchoIncludes
 \	echo join(sort(snowdrop#current_includes()), "\n")

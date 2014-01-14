@@ -53,10 +53,14 @@ function! snowdrop#get_libclang_version(...)
 endfunction
 
 
-function! snowdrop#check()
+function! snowdrop#check(...)
+	let output = get(a:, 1, 0)
 	try
-		call snowdrop#check#all()
+		call snowdrop#check#all(output)
 	catch
+		if output
+			echo v:throwpoint . " " . v:exception
+		endif
 	endtry
 endfunction
 
@@ -162,11 +166,17 @@ function! snowdrop#typeof(context)
 	if empty(result)
 		return {}
 	endif
-	if result.kind ==# "MEMBER_REF_EXPR" && result.definition.type.kind ==# "FUNCTIONPROTO"
-		return result.definition.type
+	if result.kind ==# "MEMBER_REF_EXPR"
+		if !empty(result.definition) && result.definition.type.kind ==# "FUNCTIONPROTO"
+			return result.definition.type
+		elseif !empty(result.referenced) && result.referenced.type.kind ==# "FUNCTIONPROTO"
+			return result.referenced.type
+		endif
 	else
 		return result.type
 	endif
+
+	return {}
 
 " 	if result.kind ==# "MEMBER_REF_EXPR" && result.definition.type.kind ==# "FUNCTIONPROTO"
 " 		return result.definition.result_type
@@ -207,6 +217,9 @@ endfunction
 
 
 function! snowdrop#print_type(type)
+	if empty(a:type)
+		return "Not found type."
+	endif
 	if a:type.spelling ==# a:type.canonical_spelling
 		return printf("type : %s", a:type.spelling)
 	endif
