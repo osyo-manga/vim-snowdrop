@@ -86,6 +86,7 @@ def get_clang_version():
 EditingTranslationUnitOptions = (
 	  TranslationUnit.PARSE_INCOMPLETE
 # 	| TranslationUnit.PARSE_PRECOMPILED_PREAMBLE
+	| TranslationUnit.PARSE_DETAILED_PROCESSING_RECORD
 	| TranslationUnit.PARSE_CACHE_COMPLETION_RESULTS
 # 	| TranslationUnit.PARSE_SKIP_FUNCTION_BODIES
 # 	| TranslationUnit.PARSE_INCLUDE_BRIEF_COMMENTS_IN_CODE_COMPLETION
@@ -190,16 +191,20 @@ def cursor_arguments_type_context(cursor):
 	return ([cursor_context(x)["type"] for x in cursor.get_arguments()])
 
 
-def cursor_children(cursor):
-	children = []
-	for _ in cursor.get_children():
-		children.append(cursor_context(_))
-	return children
-# 	result["children"] = children
-# 	return result
+def cursor_children(cursor, filename):
+	if filename == "":
+		return []
+	children = [cursor_context(x, filename) for x in cursor.get_children()]
+# 	for _ in cursor.get_children():
+# 		children.append(cursor_context(_, filename))
+# 	return []
+	return [x for x in children if (x.get("location", {}).get("file", "") == filename)]
+# 	return children
 
 
-def cursor_context(cursor):
+def cursor_context(cursor, filename = ""):
+	if filename != "" and cursor.location.file and (cursor.location.file.name != filename):
+		return {}
 	result = {}
 	if cursor:
 		result = {
@@ -209,11 +214,13 @@ def cursor_context(cursor):
 			"location" : location_context(cursor.location),
 			"type" : type_context(cursor.type),
 			"result_type" : type_context(cursor.result_type),
-# 			"arguments_type" : cursor_arguments_type_context(cursor),
+			"arguments_type" : cursor_arguments_type_context(cursor),
+			"filename" : filename,
 # 			"extent" : extent_context(cursor.extent),
-			"children" : cursor_children(cursor),
 # 			"definition" : cursor_context(cursor.get_definition()),
 		}
+		if filename:
+			result["children"] = cursor_children(cursor, filename)
 	return result
 
 
@@ -225,7 +232,7 @@ def context(source, filename, options, line, col):
 		location = tu.get_location(filename, (line, col))
 		cursor = Cursor.from_location(tu, location)
 
-	result = cursor_context(cursor)
+	result = cursor_context(cursor, filename)
 	result["definition"] = cursor_context(cursor.get_definition())
 	result["referenced"] = cursor_context(cursor.referenced)
 # 	result["semantic_parent"] = cursor_context(cursor.semantic_parent)
@@ -265,6 +272,15 @@ def code_complete(source, filename, options, line, col):
 # 	print clang.cindex.conf.lib.clang_codeCompleteGetContainerKind(completion, None)
 	return [completion_result_to_dict(x) for x in completion.results]
 
+
+def outline(source, filename, options, line, col):
+	tu = parse(source, options, filename)
+	if line == 0 and col == 0:
+		cursor = tu.cursor
+	else:
+		location = tu.get_location(filename, (line, col))
+		cursor = Cursor.from_location(tu, location)
+	result = cursor_context(cursor, filename)
 
 
 __all__ = ['clang.cindex']
