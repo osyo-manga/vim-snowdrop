@@ -54,7 +54,7 @@ endfunction
 
 
 function! snowdrop#command_option#split(option)
-	return map(filter(split(a:option, '\(\s\|^\)-'), 'v:val !~ ''^\s\+$'''), '"-" . v:val')
+	return map(filter(split(a:option, '\(\s\|^\)-'), 'v:val !~ ''^\s\+$'''), '"-" . matchstr(v:val, ''^\s*\zs.\{-}\ze\s*$'')')
 endfunction
 
 
