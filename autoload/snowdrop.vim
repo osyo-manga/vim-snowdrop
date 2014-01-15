@@ -53,10 +53,10 @@ function! snowdrop#get_libclang_version(...)
 endfunction
 
 
-function! snowdrop#check(...)
+function! snowdrop#verify(...)
 	let output = get(a:, 1, 0)
 	try
-		call snowdrop#check#all(output)
+		call snowdrop#verify#all(output)
 	catch
 		if output
 			echo v:throwpoint . " " . v:exception

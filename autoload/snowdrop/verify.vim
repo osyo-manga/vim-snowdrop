@@ -3,32 +3,32 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 let s:root = expand("<sfile>:p:h")
-let s:test_file = s:root . "/check_files/test.cpp"
+let s:test_file = s:root . "/verify_files/test.cpp"
 
 
-function! s:check(checker, output)
+function! s:verify(verifyer, output)
 	try
-		let result = snowdrop#check#{ a:checker }()
+		let result = snowdrop#verify#{ a:verifyer }()
 	catch
 		let result = 0
 		echo v:throwpoint . " " . v:exception
 	endtry
 	if result
-		return printf("[Success] %s", a:checker)
+		return printf("[Success] %s", a:verifyer)
 	else
-		return printf("[Failure] %s", a:checker)
+		return printf("[Failure] %s", a:verifyer)
 	endif
 endfunction
 
 
-function! snowdrop#check#load()
+function! snowdrop#verify#load()
 	let v  = snowdrop#get_libclang_version()
 	let v2 = snowdrop#libclang#get_clang_version()
 	return v != "" && v2 != "" && v == v2
 endfunction
 
 
-function! snowdrop#check#includes()
+function! snowdrop#verify#includes()
 	let result = sort(snowdrop#includes(snowdrop#context#file(s:test_file)))
 	return len(result) == 2
 \		&& fnamemodify(result[0], ":t") ==# "test.h"
@@ -36,25 +36,25 @@ function! snowdrop#check#includes()
 endfunction
 
 
-function! snowdrop#check#typeof()
+function! snowdrop#verify#typeof()
 	let result = snowdrop#typeof(snowdrop#context#file(s:test_file, { "line" : 6, "col" : 2 }))
 	return result.spelling is# "X"
 endfunction
 
 
-function! snowdrop#check#code_complete()
+function! snowdrop#verify#code_complete()
 	let result = snowdrop#code_complete_in_cursor(snowdrop#context#file(s:test_file, { "line" : 7, "col" : 3 }))
 	return sort(map(result, "v:val.complete_word")) == ['X', 'func', 'operator=', 'value', '~X']
 endfunction
 
 
-function! snowdrop#check#all(output)
+function! snowdrop#verify#all(output)
 	echo snowdrop#get_libclang_version()
 	let result = join([
-\		s:check("load", a:output),
-\		s:check("includes", a:output),
-\		s:check("typeof", a:output),
-\		s:check("code_complete", a:output),
+\		s:verify("load", a:output),
+\		s:verify("includes", a:output),
+\		s:verify("typeof", a:output),
+\		s:verify("code_complete", a:output),
 \	], "\n")
 	echo result
 endfunction
