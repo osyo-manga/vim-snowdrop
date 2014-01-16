@@ -11,7 +11,7 @@ function! marching#snowdrop#complete(context)
 \	})
 	return map(completion, '{
 \		"word" : v:val.complete_word,
-\		"abbr" : v:val.info,
+\		"abbr" : v:val.info . " -> " . v:val.result_type,
 \		"dup"  : g:marching_enable_dup
 \	}')
 endfunction
