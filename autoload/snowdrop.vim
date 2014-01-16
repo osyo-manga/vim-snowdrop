@@ -104,15 +104,21 @@ function! snowdrop#context_in_cursor(...)
 endfunction
 
 
+function! s:get_definition(cursor)
+	if empty(a:cursor.definition)
+		return a:context.referenced
+	else
+		return a:context.definition
+	end
+endfunction
+
+
 function! snowdrop#definition(context)
 	let context = snowdrop#context(a:context)
-	let definition = context.definition
+	let definition = s:get_definition(context)
 	if empty(definition)
-		let definition = context.referenced
-		if empty(definition)
-			return ["", 0, 0]
-		endif
-	endif
+		return ["", 0, 0]
+	else
 	let location = definition.location
 	return [location.file, location.line, location.column]
 " 	return snowdrop#libclang#definition(
