@@ -73,6 +73,7 @@ def set_library_path(path):
 		Config.set_library_path(path)
 	index = Index.create()
 
+
 def get_library_file():
 	conf = Config()
 	return conf.get_filename()
@@ -243,17 +244,18 @@ def context(source, filename, options, line, col):
 def completion_string_to_dict(string):
 	info = ""
 	complete_word = ""
+	result_type = ""
 	for chunk in string:
 		if chunk.isKindTypedText():
 			complete_word = chunk.spelling
 		if chunk.isKindResultType():
-			info += chunk.spelling + " "
+			result_type = chunk.spelling
 		else:
 			info += chunk.spelling
-# 		print "%s : %s" % (chunk.kind, chunk.spelling)
 	return {
 		"info" : info,
 		"complete_word" : complete_word,
+		"result_type" : result_type,
 		"availability" : str(string.availability),
 		"priority" : str(string.priority),
 	}
