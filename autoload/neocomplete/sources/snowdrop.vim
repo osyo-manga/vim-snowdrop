@@ -37,6 +37,7 @@ function! s:complete(line, col)
 \		"line" : a:line,
 \		"col"  : a:col,
 \	})
+	call filter(completion, "v:val.is_available")
 
 	let s:cache[pos] = map(completion, '{
 \		"word" : v:val.complete_word,

@@ -257,6 +257,7 @@ def completion_string_to_dict(string):
 		"complete_word" : complete_word,
 		"result_type" : result_type,
 		"availability" : str(string.availability),
+		"is_available" : str(string.availability) == "Available",
 		"priority" : str(string.priority),
 	}
 

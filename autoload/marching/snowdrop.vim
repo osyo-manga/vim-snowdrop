@@ -9,6 +9,7 @@ function! marching#snowdrop#complete(context)
 \		"line" : a:context.pos[0],
 \		"col"  : a:context.pos[1] - 1,
 \	})
+	call filter(completion, "v:val.is_available")
 	return map(completion, '{
 \		"word" : v:val.complete_word,
 \		"abbr" : v:val.info . " -> " . v:val.result_type,
