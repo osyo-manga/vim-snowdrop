@@ -155,6 +155,16 @@ b:snowdrop_command_option			*b:snowdrop_command_option*
 	バッファローカルに設定する Clang のコマンドオプションです。
 
 
+g:neocomplete#sources#snowdrop#enable	*g:neocomplete#sources#snowdrop#enable*
+	-0 以外が設定されていれば |neocomplete.vim| によるコード補完を有効にし
+	ます。
+	デフォルトでは無効になっているので有効にしたい場合は明示的に設定を行っ
+	て下さい。
+Default: >
+	let g:neocomplete#sources#snowdrop#enable = 0
+<
+
+
 ==============================================================================
 コンテキスト						*snowdrop-context*
 
@@ -180,8 +190,7 @@ marching.vim						*snowdrop-marching*
 
 |marching.vim| で |snowdrop.vim| を利用したコード補完を使用したい場合は下記の設定を
 行って下さい。
-
-Example: >
+>
 	let g:marching_backend = "snowdrop"
 <
 
@@ -189,6 +198,23 @@ Example: >
 で注意して下さい。
 この実装を使用した場合、|marching.vim| は |reunions| と |vimproc| には依存しなくな
 ります
+
+
+==============================================================================
+neocomplete-sources					*snowdrop-neocomplete*
+
+|snowdrop.vim| には |neocomplete.vim| でコード補完を行うための
+|neocomplete-sources| が付属しています。
+|neocomplete.vim| とは Shougo 氏が作成されたコード補完プラグインです。
+
+- neocomplete.vim - https://github.com/Shougo/neocomplete.vim
+
+|neocomplete.vim| で |snowdrop.vim| のコード補完を利用したい場合は、以下の設定
+を行って下さい。
+
+>
+	let g:neocomplete#sources#snowdrop#enable = 1
+<
 
 
 ==============================================================================
