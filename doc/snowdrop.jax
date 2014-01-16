@@ -9,7 +9,10 @@
   関数				  |snowdrop-functions|
 設定				|snowdrop-setting|
   snowdrop の変数		  |snowdrop-variables|
-
+コンテキスト			|snowdrop-context|
+marching.vim			|snowdrop-marching|
+neocomplete-sources		|snowdrop-neocomplete|
+unite-sources			|snowdrop-unite-sources|
 
 
 ==============================================================================
