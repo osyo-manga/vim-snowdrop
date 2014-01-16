@@ -68,7 +68,7 @@ let g:snowdrop#command_options = {
 
 
 
-####Typeof on balloon.
+###Typeof on balloon.
 
 ```vim
 set bexpr=snowdrop#ballonexpr_typeof()
@@ -77,7 +77,7 @@ set ballooneval
 ![balloon](https://f.cloud.github.com/assets/214488/1932966/22262f2e-7ed3-11e3-8ea3-e2ec1858bea4.PNG)
 
 
-####Include files.
+###Include files.
 
 ```vim
 :SnowdropEchoIncludes
@@ -85,7 +85,7 @@ set ballooneval
 ![include](http://gyazo.com/4a798e1668e204e35c5e5a5d733d6d62.png)
 
 
-####Include files on unite.vim.
+###Include files on unite.vim.
 
 ```vim
 :Unite snowdrop/outline
@@ -93,7 +93,7 @@ set ballooneval
 ![unite-snowdrop_include](https://f.cloud.github.com/assets/214488/1932993/85501f74-7ed3-11e3-9143-4844082e4b4c.PNG)
 
 
-####Include files on unite.vim.
+###Include files on unite.vim.
 
 ```vim
 :Unite snowdrop/outline
@@ -101,7 +101,7 @@ set ballooneval
 ![unite-snowdrop_outline](https://f.cloud.github.com/assets/214488/1933045/a4a85278-7ed4-11e3-8ae7-c9ef6639ff24.PNG)
 
 
-####Code completion.
+###Code completion.
 
 Use neocomplete.vim.
 
