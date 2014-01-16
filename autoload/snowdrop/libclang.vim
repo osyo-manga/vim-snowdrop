@@ -48,10 +48,6 @@ function! snowdrop#libclang#definition(source, filename, option, line, col)
 endfunction
 
 
-function! snowdrop#libclang#print_status(source, filename, option, line, col)
-	return s:binding_call("print_status", a:source, a:filename, a:option, a:line, a:col)
-endfunction
-
 function! snowdrop#libclang#context(source, filename, option, line, col)
 	return s:binding_call("context", a:source, a:filename, a:option, a:line, a:col)
 endfunction

@@ -89,18 +89,6 @@ function! snowdrop#libclang#python#definition(source, filename, option, line, co
 endfunction
 
 
-
-function! snowdrop#libclang#python#print_status(source, filename, option, line, col)
-	let option = snowdrop#command_option#split(a:option)
-	py snowdrop.print_status(
-\		vim.eval("a:source"),
-\		vim.eval("a:filename"),
-\		vim.eval("option"),
-\		int(vim.eval("a:line")),
-\		int(vim.eval("a:col")) )
-endfunction
-
-
 function! snowdrop#libclang#python#context(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
 	return pyeval('snowdrop.context(

@@ -151,22 +151,6 @@ function! snowdrop#goto_definition_in_cursor(...)
 endfunction
 
 
-function! snowdrop#print_status(context)
-	return snowdrop#libclang#print_status(
-\		a:context.source,
-\		a:context.filename,
-\		get(a:context, "option"),
-\		a:context.line,
-\		a:context.col,
-\	)
-endfunction
-
-
-function! snowdrop#print_staus_in_cursor(...)
-	call snowdrop#print_status(snowdrop#context#cursor(get(a:, 1, {})))
-endfunction
-
-
 function! snowdrop#typeof(context)
 	let result = snowdrop#context(a:context)
 	if empty(result)

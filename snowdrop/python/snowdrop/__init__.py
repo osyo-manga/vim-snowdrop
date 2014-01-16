@@ -133,36 +133,6 @@ def type_spelling(type):
 	return clang.cindex.conf.lib.clang_getTypeSpelling(type)
 
 
-def print_type_status(type, status = "type"):
-	print "---- %s ----" % status
-	print "spelling : %s" % type_spelling(type)
-	print "kind : %s" % type.kind.spelling
-	print "get_canonical : %s" % type_spelling(type.get_canonical())
-
-
-def print_cursor_status(cursor, status = "cursor"):
-	if cursor:
-		print "---- %s ----" % status
-		print "location : %s" % cursor.location
-		print "displayname : %s" % cursor.displayname
-		print "spelling : %s" % cursor.spelling
-		print "kind : %s" % cursor.kind.name
-# 		print "extent : %s" % cursor.extent
-		print_type_status(cursor.type)
-		print_type_status(cursor.result_type, "result_type")
-		if cursor.kind.is_declaration():
-			print_type_status(cursor.underlying_typedef_type, "underlying_typedef_type")
-		print " "
-
-
-def print_status(source, filename, options, line, col):
-	tu = parse(source, options, filename)
-	location = tu.get_location(filename, (line, col))
-	cursor = Cursor.from_location(tu, location)
-	print_cursor_status(cursor)
-	print_cursor_status(cursor.get_definition(), "cursor definition")
-
-
 def type_context(type):
 	return {
 		"spelling" : type_spelling(type),
