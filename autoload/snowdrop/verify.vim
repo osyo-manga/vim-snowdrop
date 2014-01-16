@@ -11,7 +11,9 @@ function! s:verify(verifyer, output)
 		let result = snowdrop#verify#{ a:verifyer }()
 	catch
 		let result = 0
-		echo v:throwpoint . " " . v:exception
+		if a:output
+			echo v:throwpoint . " " . v:exception
+		endif
 	endtry
 	if result
 		return printf("[Success] %s", a:verifyer)

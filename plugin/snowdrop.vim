@@ -8,6 +8,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+command! -bar -bang
+\	SnowdropVerify
+\	call snowdrop#verify(<bang>0)
+
+
 command! -bar SnowdropGotoDefinition
 \	call snowdrop#goto_definition_in_cursor()
 
