@@ -67,7 +67,6 @@ let g:snowdrop#command_options = {
 ![typeof](http://gyazo.com/490e613d0658f0790d9e063f346c90ff.png)
 
 
-
 ###Typeof on balloon.
 
 ```vim
@@ -82,6 +81,13 @@ augroup my-cpp
 augroup END
 ```
 ![balloon](https://f.cloud.github.com/assets/214488/1932966/22262f2e-7ed3-11e3-8ea3-e2ec1858bea4.PNG)
+
+####Result typeof.
+
+```vim
+:SnowdropEchoResultTypeof
+```
+![resulttypeof](http://gyazo.com/ca656cf9f6019b1272b6add3b32c5475.png)
 
 
 ###Include files.
