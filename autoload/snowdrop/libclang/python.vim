@@ -77,6 +77,15 @@ function! snowdrop#libclang#python#includes(source, filename, option)
 endfunction
 
 
+function! snowdrop#libclang#python#diagnostics(source, filename, option)
+	let option = snowdrop#command_option#split(a:option)
+	return pyeval('snowdrop.diagnostics(
+\		vim.eval("a:source"),
+\		vim.eval("option"),
+\		vim.eval("a:filename")
+\	)')
+endfunction
+
 function! snowdrop#libclang#python#definition(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
 	return pyeval('snowdrop.definition(

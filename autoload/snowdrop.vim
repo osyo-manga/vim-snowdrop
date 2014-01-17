@@ -83,6 +83,20 @@ function! snowdrop#includes(context)
 endfunction
 
 
+function! snowdrop#current_diagnostics(...)
+	return snowdrop#diagnostics(extend(snowdrop#context#current(), get(a:, 1, {})))
+endfunction
+
+
+function! snowdrop#diagnostics(context)
+	return snowdrop#libclang#diagnostics(
+\		a:context.source,
+\		a:context.filename,
+\		get(a:context, "option")
+\	)
+endfunction
+
+
 function! snowdrop#current_includes(...)
 	return snowdrop#includes(extend(snowdrop#context#current(), get(a:, 1, {})))
 endfunction

@@ -246,14 +246,40 @@ def code_complete(source, filename, options, line, col):
 	return [completion_result_to_dict(x) for x in completion.results]
 
 
-def outline(source, filename, options, line, col):
+def fixit_to_dict(fixit):
+	return {
+		"value" : fixit.value,
+		"range" : {
+			"start" : location_context(fixit.range.start),
+			"end"   : location_context(fixit.range.end),
+		}
+	}
+
+
+def diagnostic_to_dict(diag):
+	severity  = ['Ignored', 'Note', 'Warning', 'Error', 'Fatal']
+	return {
+			"spelling" : diag.spelling,
+			"location" : location_context(diag.location),
+			"severity" : severity[diag.severity],
+			"category_number" : diag.category_number,
+			"category_name" : diag.category_name,
+			"fixits" : map(fixit_to_dict, diag.fixits)
+	}
+
+def diagnostics(source, options, filename):
 	tu = parse(source, options, filename)
-	if line == 0 and col == 0:
-		cursor = tu.cursor
-	else:
-		location = tu.get_location(filename, (line, col))
-		cursor = Cursor.from_location(tu, location)
-	result = cursor_context(cursor, filename)
+	return map(diagnostic_to_dict, tu.diagnostics)
+# 	for diag in tu.diagnostics:
+#
+# 	print diag.spelling
+# 	print diag.location
+# 	print diag.severity
+# # 	print diag.option
+# 	print diag.category_number
+# 	print diag.category_name
+# 	for fix in diag.fixits:
+# 		print fix
 
 
 __all__ = ['clang.cindex']

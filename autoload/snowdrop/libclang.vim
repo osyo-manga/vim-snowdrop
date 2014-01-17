@@ -43,6 +43,11 @@ function! snowdrop#libclang#includes(source, filename, option)
 endfunction
 
 
+function! snowdrop#libclang#diagnostics(source, filename, option)
+	return s:binding_call("diagnostics", a:source, a:filename, a:option)
+endfunction
+
+
 function! snowdrop#libclang#definition(source, filename, option, line, col)
 	return s:binding_call("definition", a:source, a:filename, a:option, a:line, a:col)
 endfunction
