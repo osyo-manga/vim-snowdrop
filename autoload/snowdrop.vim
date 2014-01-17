@@ -145,6 +145,9 @@ function! snowdrop#definition(context)
 endfunction
 
 
+let g:snowdrop#goto_definition_open_cmd = get(g:, "snowdrop#goto_definition_open_cmd", "edit")
+
+
 function! snowdrop#definition_in_cursor(...)
 	return snowdrop#definition(snowdrop#context#cursor(get(a:, 1, {})))
 endfunction
