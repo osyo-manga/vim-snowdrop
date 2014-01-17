@@ -88,12 +88,12 @@ set ballooneval
 ###Include files on unite.vim.
 
 ```vim
-:Unite snowdrop/outline
+:Unite snowdrop/includes
 ```
 ![unite-snowdrop_include](https://f.cloud.github.com/assets/214488/1932993/85501f74-7ed3-11e3-9143-4844082e4b4c.PNG)
 
 
-###Include files on unite.vim.
+###Outline on unite.vim.
 
 ```vim
 :Unite snowdrop/outline
