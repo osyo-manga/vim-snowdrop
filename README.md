@@ -123,6 +123,9 @@ Use neocomplete.vim.
 ```vim
 " Enable code completion in neocomplete.vim.
 let g:neocomplete#sources#snowdrop#enable = 1
+
+" Not skip
+let g:neocomplete#skip_auto_completion_time = ""
 ```
 ![code_complete](http://gyazo.com/415301c1bd2fbba612eacce057efccc3.png)
 
