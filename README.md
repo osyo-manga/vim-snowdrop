@@ -71,8 +71,15 @@ let g:snowdrop#command_options = {
 ###Typeof on balloon.
 
 ```vim
-set bexpr=snowdrop#ballonexpr_typeof()
-set ballooneval
+function! s:cpp()
+    setlocal balloonexpr=snowdrop#ballonexpr_typeof()
+    setlocal ballooneval
+endfunction
+
+augroup my-cpp
+    autocmd!
+    autocmd FileType cpp call s:cpp()
+augroup END
 ```
 ![balloon](https://f.cloud.github.com/assets/214488/1932966/22262f2e-7ed3-11e3-8ea3-e2ec1858bea4.PNG)
 
