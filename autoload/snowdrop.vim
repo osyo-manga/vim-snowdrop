@@ -120,9 +120,9 @@ endfunction
 
 function! s:get_definition(cursor)
 	if empty(a:cursor.definition)
-		return a:context.referenced
+		return a:cursor.referenced
 	else
-		return a:context.definition
+		return a:cursor.definition
 	end
 endfunction
 
