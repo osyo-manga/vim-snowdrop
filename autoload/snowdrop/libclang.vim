@@ -9,6 +9,10 @@ let g:snowdrop#libclang#libclang_binding = get(g:, "snowdrop#libclang#libclang_b
 let g:snowdrop#libclang#use_libclang_bindings = get(g:, "snowdrop#libclang#use_libclang_bindings", {})
 
 
+function! s:to_slashpath(path)
+	return tr(a:path, '\', '/')
+endfunction
+
 function! s:get_binding(name)
 	return get(g:snowdrop#libclang#use_libclang_bindings, a:name, g:snowdrop#libclang#libclang_binding)
 endfunction
@@ -39,7 +43,7 @@ endfunction
 
 
 function! snowdrop#libclang#includes(source, filename, option)
-	return s:binding_call("includes", a:source, a:filename, a:option)
+	return map(s:binding_call("includes", a:source, a:filename, a:option), 's:to_slashpath(v:val)')
 endfunction
 
 
