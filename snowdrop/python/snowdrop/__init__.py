@@ -261,7 +261,8 @@ def diagnostic_to_dict(diag):
 	return {
 			"spelling" : diag.spelling,
 			"location" : location_context(diag.location),
-			"severity" : severity[diag.severity],
+			"severity" : diag.severity,
+			"severity_string" : severity[diag.severity],
 			"category_number" : diag.category_number,
 			"category_name" : diag.category_name,
 			"fixits" : map(fixit_to_dict, diag.fixits)

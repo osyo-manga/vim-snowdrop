@@ -46,5 +46,9 @@ command! -bar SnowdropEchoClangVersion
 \	echo snowdrop#get_libclang_version()
 
 
+command! -bar SnowdropErrorCheck
+\	call setqflist(snowdrop#diagnostics#to_qflist(snowdrop#current_diagnostics())) | cwindow
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo

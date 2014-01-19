@@ -4,6 +4,29 @@ set cpo&vim
 
 
 
+function! snowdrop#context#is_dummy_file(filename)
+	let filename = fnamemodify(a:filename, ":t")
+	return filename =~ '^snowdrop_dummy_filename_bufnr\d\+\.\S\+$'
+endfunction
+
+
+function! snowdrop#context#bufnr(filename)
+	if !snowdrop#context#is_dummy_file(a:filename)
+		return bufnr(a:filename)
+	endif
+	let filename = fnamemodify(a:filename, ":t")
+	return str2nr(matchstr(filename, '^snowdrop_dummy_filename_bufnr\zs\d\+\ze\.\S\+$'))
+endfunction
+
+" function! snowdrop#context#dummy_file_to_bufnr(filename)
+" 	if !snowdrop#context#is_dummy_file(a:filename)
+" 		return -1
+" 	endif
+" 	let filename = fnamemodify(a:filename, ":t")
+" 	return char2nr(matchstr(filename, '^snowdrop_dummy_filename_bufnr\(\d\+\)\.\S\+$'))
+" endfunction
+
+
 let s:extensions = {
 \	"c"   : "c",
 \	"cpp" : "cpp",
@@ -14,8 +37,9 @@ function! s:extension(filetype)
 endfunction
 
 
-function! s:dummy_filename(filetype)
-	return "snowdrop_dummy_filename." . s:extension(a:filetype)
+function! s:dummy_filename(bufnr)
+	let filetype = getbufvar(a:bufnr, "&filetype", "")
+	return printf("snowdrop_dummy_filename_bufnr%d.%s", a:bufnr, s:extension(filetype))
 endfunction
 
 
@@ -32,7 +56,7 @@ endfunction
 function! snowdrop#context#buffer(bufnr, ...)
 	let base = get(a:, 1, {})
 	return extend(base, {
-\		"filename" : s:dummy_filename(getbufvar(a:bufnr, "&filetype", "")),
+\		"filename" : s:dummy_filename(bufnr(a:bufnr)),
 \		"source" : join(getbufline(a:bufnr, 1, "$"), "\n"),
 \		"option" : snowdrop#command_option#bufnr(a:bufnr)
 \	}, "keep")
