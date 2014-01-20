@@ -13,41 +13,8 @@ command! -bar -bang
 \	call snowdrop#verify(<bang>0)
 
 
-command! -bar SnowdropGotoDefinition
-\	call snowdrop#goto_definition_in_cursor()
-
-nnoremap <silent> <Plug>(snowdrop-goto-definition) :<C-u>SnowdropGotoDefinition<CR>
-
-
-command! -bar SnowdropEchoTypeof
-\	echo snowdrop#print_type(snowdrop#typeof_in_cursor())
-
-
-function! s:get_definition()
-	let context = snowdrop#context_in_cursor()
-	if !empty(context.definition)
-		return context.definition.result_type
-	elseif !empty(context.referenced)
-		return context.referenced.result_type
-	else
-		return {}
-	endif
-endfunction
-
-command! -bar SnowdropEchoResultTypeof
-\	echo snowdrop#print_type(s:get_definition())
-"
-
-command! -bar SnowdropEchoIncludes
-\	echo join(sort(snowdrop#current_includes()), "\n")
-
-
 command! -bar SnowdropEchoClangVersion
 \	echo snowdrop#get_libclang_version()
-
-
-command! -bar SnowdropErrorCheck
-\	call setqflist(snowdrop#diagnostics#to_qflist(snowdrop#current_diagnostics())) | cwindow
 
 
 let &cpo = s:save_cpo
