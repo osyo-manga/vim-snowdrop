@@ -206,7 +206,7 @@ def context(source, filename, options, line, col):
 	result = cursor_context(cursor, filename)
 	result["definition"] = cursor_context(cursor.get_definition())
 	result["referenced"] = cursor_context(cursor.referenced)
-# 	result["semantic_parent"] = cursor_context(cursor.semantic_parent)
+	result["semantic_parent"] = cursor_context(cursor.semantic_parent)
 # 	result["lexical_parent"] = cursor_context(cursor.lexical_parent)
 	return result
 
