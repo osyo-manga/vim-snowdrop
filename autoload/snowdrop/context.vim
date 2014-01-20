@@ -111,5 +111,12 @@ function! snowdrop#context#code_complete(...)
 endfunction
 
 
+function! snowdrop#context#commentout_for_include_preprocessor(context)
+	let is_include = '^\s*#\s*include'
+	let a:context.source = join(map(split(a:context.source, "\n"), "v:val =~ is_include ? '// ' . v:val : v:val"), "\n")
+	return a:context
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
