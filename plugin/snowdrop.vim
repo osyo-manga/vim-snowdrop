@@ -19,6 +19,9 @@ command! -bar SnowdropEchoClangVersion
 command! -bar SnowdropLogs
 \	echo snowdrop#debug#logs()
 
+command! -bar SnowdropClearLogs
+\	echo snowdrop#debug#clear()
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
