@@ -4,9 +4,9 @@ set cpo&vim
 
 let s:libclang_binding = "python"
 
-let g:snowdrop#libclang#libclang_binding = get(g:, "snowdrop#libclang#libclang_binding", "python")
+let g:snowdrop#libclang#default_binding = get(g:, "snowdrop#libclang#default_binding", "python")
 
-let g:snowdrop#libclang#use_libclang_bindings = get(g:, "snowdrop#libclang#use_libclang_bindings", {})
+let g:snowdrop#libclang#use_bindings = get(g:, "snowdrop#libclang#use_bindings", {})
 
 
 function! s:to_slashpath(path)
@@ -14,7 +14,7 @@ function! s:to_slashpath(path)
 endfunction
 
 function! s:get_binding(name)
-	return get(g:snowdrop#libclang#use_libclang_bindings, a:name, g:snowdrop#libclang#libclang_binding)
+	return get(g:snowdrop#libclang#use_bindings, a:name, g:snowdrop#libclang#default_binding)
 endfunction
 
 function! s:binding_call(name, ...)
