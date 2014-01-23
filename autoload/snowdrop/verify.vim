@@ -46,18 +46,18 @@ endfunction
 
 function! snowdrop#verify#diagnostics()
 	let result = snowdrop#diagnostics(s:test_file())
-	return sort(map(result, "v:val.location.line")) == [6, 8]
+	return sort(map(result, "v:val.location.line")) == [17, 19]
 endfunction
 
 
 function! snowdrop#verify#typeof()
-	let result = snowdrop#typeof(s:test_file({ "line" : 6, "col" : 2 }))
+	let result = snowdrop#typeof(s:test_file({ "line" : 17, "col" : 2 }))
 	return result.spelling is# "X"
 endfunction
 
 
 function! snowdrop#verify#code_complete()
-	let result = snowdrop#code_complete_in_cursor(s:test_file({"line" : 7, "col" : 3 }))
+	let result = snowdrop#code_complete_in_cursor(s:test_file({"line" : 18, "col" : 3 }))
 	return sort(map(result, "v:val.complete_word")) == ['X', 'func', 'operator=', 'value', '~X']
 endfunction
 

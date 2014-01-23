@@ -1,5 +1,16 @@
 #include "test.h"
 
+#define AA \
+BB
+
+
+
+
+
+
+
+
+
 int
 main(){
 	X x;
