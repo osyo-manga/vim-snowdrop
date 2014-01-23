@@ -86,17 +86,6 @@ function! snowdrop#libclang#python#diagnostics(source, filename, option)
 \	)')
 endfunction
 
-function! snowdrop#libclang#python#definition(source, filename, option, line, col)
-	let option = snowdrop#command_option#split(a:option)
-	return pyeval('snowdrop.definition(
-\		vim.eval("a:source"),
-\		vim.eval("a:filename"),
-\		vim.eval("option"),
-\		int(vim.eval("a:line")),
-\		int(vim.eval("a:col")) )
-\	')
-endfunction
-
 
 function! snowdrop#libclang#python#context(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
@@ -113,6 +102,18 @@ endfunction
 function! snowdrop#libclang#python#code_complete(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
 	return pyeval('snowdrop.code_complete(
+\		vim.eval("a:source"),
+\		vim.eval("a:filename"),
+\		vim.eval("option"),
+\		int(vim.eval("a:line")),
+\		int(vim.eval("a:col")) )
+\	')
+endfunction
+
+
+function! snowdrop#libclang#python#definition(source, filename, option, line, col)
+	let option = snowdrop#command_option#split(a:option)
+	return pyeval('snowdrop.definition(
 \		vim.eval("a:source"),
 \		vim.eval("a:filename"),
 \		vim.eval("option"),
