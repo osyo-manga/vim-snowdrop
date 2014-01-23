@@ -5,9 +5,19 @@ set cpo&vim
 let s:root = substitute(expand("<sfile>:p:h"), '\\', '/', "g")
 let s:test_dir  = s:root . "/verify_files"
 
+
 function! s:test_file(...)
 	let base = get(a:, 1, {})
 	return snowdrop#context#file(s:test_dir . "/test.cpp", base, { "option" : "-I" . s:test_dir } )
+endfunction
+
+
+function! s:print(success, output)
+	if a:success
+		return printf("[Success] %s", a:output)
+	else
+		return printf("[Failure] %s", a:output)
+	endif
 endfunction
 
 
@@ -21,11 +31,7 @@ function! s:verify(verifyer, output)
 			echo v:throwpoint . " " . v:exception
 		endif
 	endtry
-	if result
-		return printf("[Success] %s", a:verifyer)
-	else
-		return printf("[Failure] %s", a:verifyer)
-	endif
+	return s:print(result, a:verifyer)
 endfunction
 
 
@@ -64,6 +70,7 @@ endfunction
 
 function! snowdrop#verify#all(output)
 	echo snowdrop#get_libclang_version()
+	echo s:print(has("python"), "+python")
 	let result = join([
 \		s:verify("load", a:output),
 \		s:verify("includes", a:output),
