@@ -16,6 +16,9 @@ command! -bar -bang
 command! -bar SnowdropEchoClangVersion
 \	echo snowdrop#get_libclang_version()
 
+command! -bar SnowdropLogs
+\	echo snowdrop#debug#logs()
+
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
