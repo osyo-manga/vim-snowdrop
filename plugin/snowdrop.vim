@@ -20,7 +20,7 @@ command! -bar SnowdropLogs
 \	echo snowdrop#debug#logs()
 
 command! -bar SnowdropClearLogs
-\	echo snowdrop#debug#clear()
+\	call snowdrop#debug#clear()
 
 
 let &cpo = s:save_cpo
