@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*
 import sys
 import os
-import vim
 from pprint import pprint
 
 sys.path.insert(0, os.path.dirname(__file__))
@@ -63,6 +62,7 @@ functionList.append(
 
 if not Config.loaded:
 	Config.set_compatibility_check(False)
+# 	index = Index.create()
 
 
 def set_library_path(path):
@@ -187,7 +187,7 @@ def cursor_context(cursor, filename = ""):
 			"result_type" : type_context(cursor.result_type),
 			"arguments_type" : cursor_arguments_type_context(cursor),
 			"filename" : filename,
-# 			"extent" : extent_context(cursor.extent),
+			"extent" : extent_context(cursor.extent),
 # 			"definition" : cursor_context(cursor.get_definition()),
 		}
 		if filename:
@@ -227,7 +227,7 @@ def completion_string_to_dict(string):
 		"complete_word" : complete_word,
 		"result_type" : result_type,
 		"availability" : str(string.availability),
-		"is_available" : str(string.availability) == "Available",
+		"is_available" : int(str(string.availability) == "Available"),
 		"priority" : str(string.priority),
 	}
 
@@ -263,7 +263,7 @@ def diagnostic_to_dict(diag):
 			"location" : location_context(diag.location),
 			"severity" : diag.severity,
 			"severity_string" : severity[diag.severity],
-			"category_number" : diag.category_number,
+			"category_number" : int(diag.category_number),
 			"category_name" : diag.category_name,
 			"fixits" : map(fixit_to_dict, diag.fixits)
 	}
