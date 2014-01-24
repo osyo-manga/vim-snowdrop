@@ -8,6 +8,9 @@ let g:snowdrop#libclang#default_binding = get(g:, "snowdrop#libclang#default_bin
 
 let g:snowdrop#libclang#use_bindings = get(g:, "snowdrop#libclang#use_bindings", {})
 
+function! snowdrop#libclang#is_libloadable(lib)
+	return filereadable(a:lib) || executable(a:lib) || globpath(substitute($PATH, ";", ",", "g"), a:lib)
+endfunction
 
 function! s:to_slashpath(path)
 	return tr(a:path, '\', '/')
@@ -24,7 +27,7 @@ endfunction
 
 function! snowdrop#libclang#load(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
-	if filereadable(libclang) != 1
+	if !snowdrop#libclang#is_libloadable(libclang)
 		return snowdrop#echoerr("Not found libclang : " . libclang)
 	endif
 endfunction
