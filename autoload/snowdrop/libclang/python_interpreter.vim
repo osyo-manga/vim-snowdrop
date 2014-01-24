@@ -37,12 +37,12 @@ endfunction
 
 
 function! snowdrop#libclang#python_interpreter#get_library_file()
-	return s:python().get("snowdrop.get_library_file()")
+	return eval(s:python().get("snowdrop.get_library_file()"))
 endfunction
 
 
 function! snowdrop#libclang#python_interpreter#get_clang_version()
-	return s:python().get("snowdrop.get_clang_version()")
+	return eval(s:python().get("snowdrop.get_clang_version()"))
 endfunction
 
 
@@ -105,7 +105,12 @@ endfunction
 
 function! s:pyfunc(func, args)
 	call snowdrop#debug#print("python_interpreter " . "s:pyfunc " . a:func, a:args)
-	return s:python().get(a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")")
+
+	let tempfile = tr(tempname(), '\', '/')
+	let func = a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")"
+	call s:python().get(printf('f = open("%s", "w"); f.write(str(%s)); f.close();', tempfile, func))
+	return eval(readfile(tempfile)[0])
+" 	return s:python().get(a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")")
 endfunction
 
 
@@ -132,6 +137,7 @@ function! s:process(label, command)
 	function! self.post(expr, ...)
 		let wait = get(a:, 1, 30)
 		if !self.is_got
+" 			call self.debug(s:P.read_wait_end(self.label, [self.endpattern]))
 			call self.debug(s:P.read_wait(self.label, wait, [self.endpattern]))
 		endif
 		let self.is_got = 0
@@ -144,6 +150,7 @@ function! s:process(label, command)
 		if expr != ""
 			call self.post(expr)
 		endif
+" 		let result = self.debug(s:P.read_wait_end(self.label, [self.endpattern]))
 		let result = self.debug(s:P.read_wait(self.label, wait, [self.endpattern]))
 		if result[2] ==# "matched"
 			let self.is_got = 1
@@ -179,11 +186,7 @@ function! s:python()
 	endfunction
 
 	function! self.filter(data)
-		let expr = substitute(a:data, "[\r\n\\|\n]", "", "g")
-		if expr == ""
-			return ""
-		endif
-		return eval(substitute(a:data, "[\r\n\\|\n]", "", "g"))
+		return substitute(a:data, "[\r\n\\|\n]", "", "g")
 	endfunction
 
 	let s:_python = self
