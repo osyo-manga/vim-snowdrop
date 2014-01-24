@@ -24,7 +24,7 @@ endfunction
 
 function! snowdrop#libclang#load(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
-	if executable(libclang) != 1
+	if filereadable(libclang) != 1
 		return snowdrop#echoerr("Not found libclang : " . libclang)
 	endif
 endfunction

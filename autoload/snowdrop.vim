@@ -42,7 +42,7 @@ endfunction
 
 function! snowdrop#get_libclang_version(...)
 	let libclang = get(a:, 1, snowdrop#get_libclang_filename())
-	if empty(executable(libclang))
+	if empty(filereadable(libclang))
 		call snowdrop#echoerr("Not found libclang file : " . libclang)
 		return snowdrop#echoerr("Please set 'g:snowdrop#libclang_directory'")
 	endif
