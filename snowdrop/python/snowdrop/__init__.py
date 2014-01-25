@@ -105,7 +105,10 @@ def parse(source, options, name):
 	global index
 	global EditingTranslationUnitOptions
 # 	return index.parse(name, args = options, unsaved_files = [ (name, source) ])
-	return index.parse(name, args = options, unsaved_files = [ (name, source) ], options=EditingTranslationUnitOptions)
+	if source == "":
+		return index.parse(name, args = options, options=EditingTranslationUnitOptions)
+	else:
+		return index.parse(name, args = options, unsaved_files = [ (name, source) ], options=EditingTranslationUnitOptions)
 
 
 def includes(source, options, name):
@@ -240,7 +243,10 @@ def completion_result_to_dict(result):
 
 def code_complete(source, filename, options, line, col):
 	tu = parse(source, options, filename)
-	completion = tu.codeComplete(filename, line, col, unsaved_files = [ (filename, source) ])
+	if source == "":
+		completion = tu.codeComplete(filename, line, col)
+	else:
+		completion = tu.codeComplete(filename, line, col, unsaved_files = [ (filename, source) ])
 	
 # 	print clang.cindex.conf.lib.clang_codeCompleteGetContainerKind(completion, None)
 	return [completion_result_to_dict(x) for x in completion.results]

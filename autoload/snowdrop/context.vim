@@ -47,9 +47,10 @@ function! snowdrop#context#file(file, ...)
 	let base = get(a:, 1, {})
 	return extend(base, {
 \		"filename" : a:file,
-\		"source" : join(readfile(a:file), "\n"),
+\		"source" : "",
 \		"option" : snowdrop#command_option#file(a:file)
 \	}, "keep")
+" \		"source" : join(readfile(a:file), "\n"),
 endfunction
 
 
@@ -113,6 +114,9 @@ endfunction
 
 function! snowdrop#context#comment_out_include_preprocessor(context)
 	let is_include = '^\s*#\s*include'
+	if a:context.source == ""
+		let a:context.source = join(readfile(a:context.filename), "\n")
+	endif
 	let a:context.source = join(map(split(a:context.source, "\n"), "v:val =~ is_include ? '// ' . v:val : v:val"), "\n")
 	return a:context
 endfunction

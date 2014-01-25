@@ -105,9 +105,10 @@ endfunction
 
 function! s:pyfunc(func, args)
 	call snowdrop#debug#print("python_interpreter " . "s:pyfunc " . a:func, a:args)
-
+	
 	let tempfile = tr(tempname(), '\', '/')
 	let func = a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")"
+
 	call s:python().get(printf('f = open("%s", "w"); f.write(str(%s)); f.close();', tempfile, func))
 	return eval(readfile(tempfile)[0])
 " 	return s:python().get(a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")")
