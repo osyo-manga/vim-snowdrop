@@ -31,12 +31,16 @@ function! snowdrop#ftplugin#command(filetype)
 	command! -buffer -bar SnowdropEchoResultTypeof
 \		echo snowdrop#print_type(s:get_definition())
 
+	command! -buffer -bar SnowdropFixit
+\		call snowdrop#fixit#current()
+
 	return "
 \		delcommand SnowdropEchoIncludes
 \|		delcommand SnowdropErrorCheck
 \|		delcommand SnowdropGotoDefinition
 \|		delcommand SnowdropEchoTypeof
 \|		delcommand SnowdropEchoResultTypeof
+\|		delcommand SnowdropFixit
 \	"
 endfunction
 
