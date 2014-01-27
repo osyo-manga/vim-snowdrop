@@ -43,6 +43,7 @@ function! snowdrop#libclang#python#load(libclang)
 	py import vim
 
 	call s:import(s:python_module_path, "snowdrop")
+	call s:import(s:python_module_path, "snowdrop.libclang")
 
 	let path = fnamemodify(a:libclang, ":h")
 	let file = fnamemodify(a:libclang, ":t")
