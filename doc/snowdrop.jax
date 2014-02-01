@@ -176,6 +176,12 @@ Default: >
 	let g:neocomplete#sources#snowdrop#enable = 0
 <
 
+g:snowdrop#libclang#default_binding	*g:snowdrop#libclang#default_binding*
+	使用する |snowdrop-libclang-bindings| を設定します。
+Default: >
+	let g:snowdrop#libclang#default_binding = "python"
+<
+
 
 ==============================================================================
 コンテキスト						*snowdrop-context*
@@ -191,6 +197,41 @@ source			String		(Required)
 						*snowdrop-context-option*
 option			String		(Optional)
 			Clang のコマンドオプション
+
+
+==============================================================================
+libclang のバインディング			*snowdrop-libclang-bindings*
+
+|snowdrop.vim| では libclang を呼び出す為の手段がいくつか実装されています。
+これは |g:snowdrop#libclang#default_binding| で使用する実装を設定する事ができ
+る。
+要求する機能が実装ごとに異なるので、自分の環境にあった実装を設定するとよいで
+しょう。
+
+
+------------------------------------------------------------------------------
+python						*snowdrop-libclang-python*
+
+Vim の |python| を使用した実装です。
+
+- Requirement:
+	Clang 3.3 - http://llvm.org/releases/3.3/tools/clang/docs/ReleaseNotes.html
+	|+python|
+
+
+------------------------------------------------------------------------------
+python_interpreter			*snowdrop-libclang-python_interpreter*
+
+Python の対話環境を使用した実装です。
+
+NOTE: 対象のファイル（バッファ）の行数や実行結果の量が大きい場合は、
+|snowdrop-libclang-python| の方が高速で動作します。
+
+- Requirement:
+	Clang 3.3 - http://llvm.org/releases/3.3/tools/clang/docs/ReleaseNotes.html
+	python コマンド
+	|vimproc.vim| - https://github.com/Shougo/vimproc.vim
+
 
 ==============================================================================
 marching.vim						*snowdrop-marching*
