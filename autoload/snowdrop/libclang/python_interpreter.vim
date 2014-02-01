@@ -48,12 +48,14 @@ endfunction
 
 function! snowdrop#libclang#python_interpreter#includes(source, filename, option)
 	let option = snowdrop#command_option#split(a:option)
-	let source =  s:escape_backslash(a:source)
-	let result = s:pyfunc("snowdrop.includes", [
-\		source,
-\		option,
-\		a:filename,
-\	])
+	let result = s:pyfunc_source(
+\		a:source,
+\		"snowdrop.includes",
+\		[
+\			option,
+\			a:filename,
+\		]
+\	)
 
 	if empty(result)
 		return []
@@ -66,52 +68,78 @@ endfunction
 function! snowdrop#libclang#python_interpreter#diagnostics(source, filename, option)
 	let option = snowdrop#command_option#split(a:option)
 	let source = s:escape_backslash(a:source)
-	return s:pyfunc("snowdrop.diagnostics", [
-\		source,
-\		option,
-\		a:filename,
-\	])
+
+	return s:pyfunc_source(
+\		a:source,
+\		"snowdrop.diagnostics",
+\		[
+\			option,
+\			a:filename,
+\		]
+\	)
+
 endfunction
 
 
 function! snowdrop#libclang#python_interpreter#context(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
 	let source = s:escape_backslash(a:source)
-	return s:pyfunc("snowdrop.context", [
-\		source,
+
+	return s:pyfunc_source(
+\		a:source,
+\		"snowdrop.context",
+\		[
 \		a:filename,
 \		option,
 \		a:line,
 \		a:col,
-\	])
+\		]
+\	)
 endfunction
 
 
 function! snowdrop#libclang#python_interpreter#code_complete(source, filename, option, line, col)
 	let option = snowdrop#command_option#split(a:option)
 	let source = s:escape_backslash(a:source)
-	return s:pyfunc("snowdrop.code_complete", [
-\		source,
+
+	return s:pyfunc_source(
+\		a:source,
+\		"snowdrop.code_complete",
+\		[
 \		a:filename,
 \		option,
 \		a:line,
 \		a:col,
-\	])
+\		]
+\	)
 endfunction
 
 
-
-
-
 function! s:pyfunc(func, args)
-	call snowdrop#debug#print("python_interpreter " . "s:pyfunc " . a:func, a:args)
-	
-	let tempfile = tr(tempname(), '\', '/')
+	let output = tr(tempname(), '\', '/')
 	let func = a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")"
 
-	call s:python().get(printf('f = open("%s", "w"); f.write(str(%s)); f.close();', tempfile, func))
-	return eval(readfile(tempfile)[0])
+	call snowdrop#debug#print("python_interpreter " . "s:pyfunc " . func)
+
+	call s:python().get(printf('f = open("%s", "w"); f.write(str(%s)); f.close();', output, func))
+	return eval(get(readfile(output), 0, "''"))
 " 	return s:python().get(a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")")
+endfunction
+
+
+function! s:pyfunc_source(source, func, args)
+	if a:source == ""
+		return s:pyfunc(a:func, [""] + a:args)
+	endif
+	let output = tr(tempname(), '\', '/')
+	let input  = tr(tempname(), '\', '/')
+
+	call writefile(split(a:source, "\n"), input)
+	let func = a:func . "(input.read(), " . join(map(a:args, "string(v:val)"), ",") . ")"
+
+	call snowdrop#debug#print("python_interpreter " . "s:pyfunc_source " . func)
+	call s:python().get(printf('input = open("%s", "r"); output = open("%s", "w"); output.write(str(%s)); input.close(); output.close();', input, output, func))
+	return eval(get(readfile(output), 0, "''"))
 endfunction
 
 
