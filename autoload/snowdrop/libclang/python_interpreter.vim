@@ -115,6 +115,8 @@ function! snowdrop#libclang#python_interpreter#code_complete(source, filename, o
 endfunction
 
 
+
+
 function! s:pyfunc(func, args)
 	let output = tr(tempname(), '\', '/')
 	let func = a:func . "(" . join(map(a:args, "string(v:val)"), ",") . ")"
@@ -134,11 +136,11 @@ function! s:pyfunc_source(source, func, args)
 	let output = tr(tempname(), '\', '/')
 	let input  = tr(tempname(), '\', '/')
 
-	call writefile(split(a:source, "\n"), input)
+	call writefile(split(a:source, "\n", 1), input)
 	let func = a:func . "(input.read(), " . join(map(a:args, "string(v:val)"), ",") . ")"
 
 	call snowdrop#debug#print("python_interpreter " . "s:pyfunc_source " . func)
-	call s:python().get(printf('input = open("%s", "r"); output = open("%s", "w"); output.write(str(%s)); input.close(); output.close();', input, output, func))
+	call s:python().get(printf('input = open("%s", "r"); output = open("%s", "w"); output.write(str(%s)); print 2134; input.close(); output.close();', input, output, func))
 	return eval(get(readfile(output), 0, "''"))
 endfunction
 
