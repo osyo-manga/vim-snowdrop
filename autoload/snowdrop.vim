@@ -179,6 +179,10 @@ function! snowdrop#typeof(context)
 		elseif !empty(result.referenced) && result.referenced.type.kind ==# "FUNCTIONPROTO"
 			return result.referenced.type
 		endif
+
+	" auto 型で宣言されている場合は右辺値を参照する
+	elseif result.type.spelling ==# "auto"
+		return get(result.children, 0, { "type" : result.type }).type
 	else
 		return result.type
 	endif
