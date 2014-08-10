@@ -148,7 +148,7 @@ Example >
 	\		"C:/cpp/boost",
 	\		"C:/cpp/sprout",
 	\	]
-	\}
+	\]
 
 	" Unix 系の設定例
 	" https://github.com/osyo-manga/vim-marching/issues/4
@@ -158,7 +158,7 @@ Example >
 	\	split(glob('/usr/include/*/c++/*'), '\n') +
 	\	split(glob('/usr/include/*/'), '\n'),
 	\	'isdirectory(v:val)')
-	\}
+	\]
 
 <
 g:snowdrop#goto_definition_open_cmd	*g:snowdrop#goto_definition_open_cmd*
