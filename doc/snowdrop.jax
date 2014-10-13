@@ -142,23 +142,23 @@ g:snowdrop#include_paths			*g:snowdrop#include_paths*
 
 Example >
 	" 標準ライブラリのパスも追加しておく必要があります。
-	let g:snowdrop#include_paths = [
+	let g:snowdrop#include_paths = {
 	\	"cpp" : [
 	\		"C:/MinGW/lib/gcc/mingw32/4.6.2/include/c++",
 	\		"C:/cpp/boost",
 	\		"C:/cpp/sprout",
 	\	]
-	\]
+	\}
 
 	" Unix 系の設定例
 	" https://github.com/osyo-manga/vim-marching/issues/4
-	let g:snowdrop#include_paths = [
+	let g:snowdrop#include_paths = {
 	\	"cpp" : filter(
 	\	split(glob('/usr/include/c++/*'), '\n') +
 	\	split(glob('/usr/include/*/c++/*'), '\n') +
 	\	split(glob('/usr/include/*/'), '\n'),
 	\	'isdirectory(v:val)')
-	\]
+	\}
 
 <
 g:snowdrop#goto_definition_open_cmd	*g:snowdrop#goto_definition_open_cmd*
