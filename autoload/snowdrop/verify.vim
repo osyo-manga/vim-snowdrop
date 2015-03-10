@@ -5,10 +5,12 @@ set cpo&vim
 let s:root = substitute(expand("<sfile>:p:h"), '\\', '/', "g")
 let s:test_dir  = s:root . "/verify_files"
 
+let s:List = snowdrop#vital().import("Data.List")
+
 
 function! s:test_file(...)
 	let base = get(a:, 1, {})
-	return snowdrop#context#file(s:test_dir . "/test.cpp", base, { "option" : "-I" . s:test_dir } )
+	return snowdrop#context#file(s:test_dir . "/test.cpp", base, { "option" : "-std=c++03 -I" . s:test_dir } )
 endfunction
 
 
@@ -64,7 +66,7 @@ endfunction
 
 function! snowdrop#verify#code_complete()
 	let result = snowdrop#code_complete_in_cursor(s:test_file({"line" : 18, "col" : 3 }))
-	return sort(map(result, "v:val.complete_word")) == ['X', 'func', 'operator=', 'value', '~X']
+	return s:List.uniq(sort(map(result, "v:val.complete_word"))) == ['X', 'func', 'operator=', 'value', '~X']
 endfunction
 
 

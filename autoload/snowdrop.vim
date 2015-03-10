@@ -3,6 +3,13 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
+function! snowdrop#vital()
+	if !exists("s:vital")
+		let s:vital = vital#of('snowdrop')
+	endif
+	return s:vital
+endfunction
+
 function! snowdrop#echoerr(str)
 	echohl ErrorMsg
 	echo "snowdrop.vim : " . a:str
