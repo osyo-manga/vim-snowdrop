@@ -138,7 +138,8 @@ def type_context(type):
 	return {
 		"spelling" : type_spelling(type),
 		"canonical_spelling" : type_spelling(type.get_canonical()),
-		"kind" : type.kind.name
+		"kind" : type.kind.name,
+		"declaration_location" : location_context(type.get_declaration().location)
 	}
 
 
