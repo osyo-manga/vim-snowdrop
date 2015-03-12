@@ -180,11 +180,14 @@ function! snowdrop#typeof(context)
 	if empty(result)
 		return {}
 	endif
+" 	PP result
 	if result.kind ==# "MEMBER_REF_EXPR"
 		if !empty(result.definition) && result.definition.type.kind ==# "FUNCTIONPROTO"
 			return result.definition.type
 		elseif !empty(result.referenced) && result.referenced.type.kind ==# "FUNCTIONPROTO"
 			return result.referenced.type
+		else
+			return result.definition.type
 		endif
 
 	" auto 型で宣言されている場合は右辺値を参照する
