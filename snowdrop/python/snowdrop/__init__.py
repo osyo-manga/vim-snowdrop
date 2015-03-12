@@ -12,6 +12,9 @@ sys.path.remove(os.path.dirname(__file__))
 def set_library_path(path):
 	libclang.set_library_path(path)
 
+def set_library_file(file):
+	libclang.set_library_file(file)
+
 def get_library_file():
 	return libclang.get_library_file()
 

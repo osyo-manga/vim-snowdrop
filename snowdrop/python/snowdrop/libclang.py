@@ -68,9 +68,17 @@ def set_library_path(path):
 	if path != "":
 		Config.loaded = False
 		Config.set_compatibility_check(False)
+		Config.set_library_file("")
 		Config.set_library_path(path)
 	index = Index.create()
 
+def set_library_file(file):
+	global index
+	if file != "":
+		Config.loaded = False
+		Config.set_compatibility_check(False)
+		Config.set_library_file(file)
+	index = Index.create()
 
 def get_library_file():
 	conf = Config()

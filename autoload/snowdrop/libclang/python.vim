@@ -45,9 +45,10 @@ function! snowdrop#libclang#python#load(libclang)
 	call s:import(s:python_module_path, "snowdrop")
 	call s:import(s:python_module_path, "snowdrop.libclang")
 
-	let path = fnamemodify(a:libclang, ":h")
-	let file = fnamemodify(a:libclang, ":t")
-	py snowdrop.set_library_path( vim.eval("path") )
+	py snowdrop.set_library_file( vim.eval("a:libclang") )
+" 	let path = fnamemodify(a:libclang, ":h")
+" 	let file = fnamemodify(a:libclang, ":t")
+" 	py snowdrop.set_library_path( vim.eval("path") )
 
 	let s:is_loaded = 1
 endfunction
