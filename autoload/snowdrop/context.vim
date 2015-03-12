@@ -115,9 +115,9 @@ endfunction
 function! snowdrop#context#comment_out_include_preprocessor(context)
 	let is_include = '^\s*#\s*include'
 	if a:context.source == ""
-		let a:context.source = join(readfile(a:context.filename), "\n", 1)
+		let a:context.source = join(readfile(a:context.filename), "\n")
 	endif
-	let a:context.source = join(map(split(a:context.source, "\n", 1), "v:val =~ is_include ? '// ' . v:val : v:val"), "\n")
+	let a:context.source = join(map(split(a:context.source, "\n"), "v:val =~ is_include ? '// ' . v:val : v:val"), "\n")
 	return a:context
 endfunction
 
