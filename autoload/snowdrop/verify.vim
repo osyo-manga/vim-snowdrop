@@ -84,5 +84,18 @@ function! snowdrop#verify#all(output)
 endfunction
 
 
+function! snowdrop#verify#all_with_out_load(output)
+	echo snowdrop#libclang#get_clang_version()
+	echo s:print(has("python"), "+python")
+	let result = join([
+\		s:verify("includes", a:output),
+\		s:verify("diagnostics", a:output),
+\		s:verify("typeof", a:output),
+\		s:verify("code_complete", a:output),
+\	], "\n")
+	echo result
+endfunction
+
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
