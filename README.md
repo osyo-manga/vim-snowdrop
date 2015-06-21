@@ -1,5 +1,7 @@
 #snowdrop.vim
 
+snowdrop.vim is libclang wrapper.
+
 ##Requirement
 
 * __Vim supported__
@@ -43,10 +45,10 @@ let g:snowdrop#libclang_directory = "C:/llvm/bin"
 
 " set include directory path.
 let g:snowdrop#include_paths = {
-\	"cpp" : {
+\	"cpp" : [
 \		"C:/cpp/boost",
 \		"C:/cpp/sprout",
-\	}
+\	]
 \}
 
 " set clang command options.
